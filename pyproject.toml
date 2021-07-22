@@ -1,0 +1,73 @@
+[tool.poetry]
+name = "tiez"
+version = "0.1.0"
+description = "Human friendly datetime utilities."
+authors = ["ericmiguel <eric.mrib@gmail.com.br>"]
+
+# https://mypy.readthedocs.io/en/stable/config_file.html
+[[tool.mypy.overrides]]
+module = [
+    "pandas",
+    "boto3"
+]
+ignore_missing_imports = true
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.26.0"
+pydantic = "^1.8.2"
+pymongo = "^3.12.0"
+dateutils = "^0.6.12"
+boto3 = "^1.18.2"
+
+[tool.poetry.dev-dependencies]
+isort = "^5.8.0"
+black = "^21.6b0"
+mypy = "^0.902"
+pydocstyle = "^6.1.1"
+flake9 = "^3.8.3"
+pre-commit = "^2.13.0"
+pytest = "^6.2.4"
+types-requests = "^2.25.0"
+types-pytz = "^2021.1.0"
+types-python-dateutil = "^0.1.4"
+
+[tool.isort]
+profile = "black"
+force_single_line = true
+atomic = true
+include_trailing_comma = true
+lines_after_imports = 2
+lines_between_types = 1
+use_parentheses = true
+src_paths = ["poetry", "tests"]
+filter_files = true
+known_first_party = "poetry"
+
+[tool.flake8]
+max-line-length = 88
+max-complexity = 10
+exclude = [
+    ".venv",
+    ".git",
+    "__pycache__",
+    "*.egg-info",
+    ".pytest_cache",
+    ".mypy_cache"
+]
+ignore = [  # alertas e erros por conta do black
+    "E501", # linha longa
+    "E203", # espaço antes de ':'
+    "E225", # sem espaço ao redor de operadores 
+    "W503", # quebra de linha antes de um operador binário
+    "W504"  # quebra de linha após um operador binário line
+]
+
+[tool.pydocstyle]
+convention = "numpy"
+add-ignore = "D401"
+match-dir='^(tiez).*'
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
