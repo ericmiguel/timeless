@@ -2,87 +2,121 @@
 
 A datetime toolkit for people in a hurry. It provides a simple API, heavily inspired by [Pendulum](https://github.com/sdispater/pendulum).
 
+Timeless is a work in progress.
+
 ## 🧠 Features
 
 - ✔️ very simple API
 - ✔️ few dependencies
-- 🔨 probably will be more actively maintained than Pendulum
+
+Ti probably already more actively maintained than Pendulum, unfortunately 😢
+
+## 📝 Why use Timeless?
+
+To be quiet honest, Timeless is a weekend project. I love Pendulum, but since last year it doesnt seems to be actively maintained. For example, I missed a better type annotation suport. Subtely then I started to write Timeless for my own day-to-day use.
+
+If this package is useful for you, you can say thanks staring this repo.
 
 ## 💻 Examples of usage
 
-Timeless use two main concepts: `Datetime` and `Period`. A datetime is a point in time, and a period is a duration.
+Timeless use two main concepts: `Datetime` and `Period`. A datetime is a point in Time, and a Period is a duration.
 
-Timeless does`t differentiate between a datetime and date.
+Timeless does`t differentiate between datetime and date objects.
 
-All datetimes are explicit considered to be in the UTC+00:00 timezone if not any other timezone name is specified.
+All datetimes are assumed to be in the UTC+00:00 timezone if any other timezone is specified.
 
 ---
 
-Basic usage:
+### Datetime
 
 ```python
 import timeless
 
 start = timeless.datetime(1900, 1, 1, zone="UTC")
-# Datetime(1900, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC'))
-
 end = start.add(years=1)
-# Datetime(1901, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC'))
 
 end.subtract(months=1)
-# Datetime(1900, 12, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC'))
-```
-
-Datetime utility methods:
-
-```python
-start = timeless.datetime(1900, 1, 1, zone="UTC")
 
 start.set(year=2099, month=2, day=26, hour=5, zone="America/Sao_Paulo")
-# Datetime(2099, 2, 26, 5, 0, tzinfo=zoneinfo.ZoneInfo(key='America/Sao_Paulo'))
 
+start.is_past()  # True
 start.is_future()  # False
-
 start.set(year=2099).is_future()  # True
 ```
 
-Create a date range:
+Surely, you can get the current time:
 
 ```python
-start = timeless.datetime(1900, 1, 1, zone="UTC")
-end = start.add(months=2)
-
-list(timeless.period(start, end, freq="months"))
-""" 
-[Datetime(1900, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')),
- Datetime(1900, 2, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')),
- Datetime(1900, 3, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC'))]
-"""
+timeless.today()
+timeless.now()
 ```
 
-Change the frequency of a date range:
+Timeless heavily uses dateutil. The difference between two dates gives you a relativedelta object:
 
 ```python
-start = timeless.datetime(1900, 1, 1, zone="UTC")
-end = start.add(days=1)
+start.dif(end)
+```
 
+### Periods
+
+Create a date range with `Period`:
+
+```python
 period_1 = timeless.period(start, end, freq="days")
-period_2 = period_1.to("hours")
+period_2 = period_1.compute()
+```
 
-list(period_1)
-""" 
-[Datetime(1900, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')),
- Datetime(1900, 1, 2, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC'))]
-"""
+Periods are always yielded. Use compute or just list(period) to get the list of datetimes.
 
-list(period_2)
-"""
-[Datetime(1900, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')),
- Datetime(1900, 1, 1, 1, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')),
-...
- Datetime(1900, 1, 1, 23, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')),
- Datetime(1900, 1, 2, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC'))]
-"""
+To easily change the frequency of a date range, use `to`:
+
+```python
+period_1.to("hours")
+```
+
+### Using Timeless and Pandas
+
+Who else loves Pandas? The ones who says doens`t like Pandas probabily never used it for real. Timeless has some basic Pandas Timestamp compatibility methods.
+
+```python
+import pandas as pd
+
+pd_timestamp = pd.Timestamp('1900-01-01 00:00:00', tz=None)
+pd_daterange = pd.date_range(pd_timestamp, periods=2, freq="MS")
+
+timeless.from_pandas(pd_timestamp)
+timeless.from_pandas(pd_daterange)
+
+timeless.to_pandas(period_1)
+```
+
+Note that only the main Pandas freqs are implemented: D, W, M, A/ Y, H, T/min, S and U/ US. Freqs like MS, AS and YS are coerced to months and years, respectively.
+
+### Utilitaries
+
+Parse some strings to datetime:
+
+```python
+fill_date = timeless.datetime(2099, 2, 26, zone="UTC")
+timeless.parse("1900", zone="America/Sao_Paulo", fill=fill_date)
+```
+
+Or get it as a ISO 8601 string:
+
+```python
+timeless.now().to_iso()
+```
+
+Or find the next friday!
+
+```python
+timeless.now().get_next("friday")
+```
+
+Timeless tries to be as flexible as possible. You can create some quite cool chain operations easily:
+
+```python
+timeless.period(start, end.add(days=7), freq="days").to("weeks").compute()
 ```
 
 ## 🏗️ Development

@@ -8,6 +8,7 @@ from typing import Union
 from zoneinfo import ZoneInfo
 
 from dateutil.relativedelta import relativedelta
+from timeless import utils
 
 
 class Datetime(_datetime, _date):
@@ -177,5 +178,50 @@ class Datetime(_datetime, _date):
     @property
     def zero(self):
         """Get rid of hour, minute, second, and microsecond information."""
-        self.replace(hour=0, minute=0, second=0, microsecond=0)
-        return self
+        return self.set(hour=0, minute=0, second=0, microsecond=0, zone=self.zone)
+
+    def diff(self, other: "Datetime") -> relativedelta:
+        """
+        Get the difference between the instance and another.
+
+        Returns
+        -------
+        Datetime
+            [description]
+        """
+        return relativedelta(self, other)
+
+    def get_next(self, weekday: str) -> "Datetime":
+        weekday_ = utils.Weekdays.__dict__[weekday]
+        next_weekday = self + relativedelta(days=1, weekday=weekday_)
+
+        return self.__class__(
+            next_weekday.year,
+            next_weekday.month,
+            next_weekday.day,
+            0,
+            0,
+            0,
+            0,
+            zone=self.zone,
+        )
+
+    def to_datetime(self) -> _datetime:
+        """
+        Convert the instance to a datetime object.
+
+        Returns
+        -------
+        _datetime
+            [description]
+        """
+        return _datetime(
+            year=self.year,
+            month=self.month,
+            day=self.day,
+            hour=self.hour,
+            minute=self.minute,
+            second=self.second,
+            microsecond=self.microsecond,
+            tzinfo=self.tzinfo,
+        )

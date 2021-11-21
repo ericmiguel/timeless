@@ -90,7 +90,9 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
         _start = dt.min().to_pydatetime()
         _end = dt.max().to_pydatetime()
 
-        if not _start.tzinfo:
+        try:
+            _ = _start.tzinfo.zone
+        except AttributeError:
             _start = _start.astimezone(ZoneInfo("UTC"))
             _end = _end.astimezone(ZoneInfo("UTC"))
 
@@ -102,7 +104,7 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
             _start.minute,
             _start.second,
             _start.microsecond,
-            _start.tzinfo.zone,
+            _start.tzinfo.key,
         )
         end = Datetime(
             _end.year,
@@ -112,12 +114,18 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
             _end.minute,
             _end.second,
             _end.microsecond,
-            _end.tzinfo.zone,
+            _end.tzinfo.key,
         )
         return Period(start, end, freq)
 
     else:
         datetime_obj = dt.to_pydatetime()
+
+        try:
+            _ = datetime_obj.tzinfo.zone
+        except AttributeError:
+            datetime_obj = datetime_obj.astimezone(ZoneInfo("UTC"))
+
         return Datetime(
             datetime_obj.year,
             datetime_obj.month,
@@ -126,7 +134,7 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
             datetime_obj.minute,
             datetime_obj.second,
             datetime_obj.microsecond,
-            datetime_obj.tzinfo.zone,
+            datetime_obj.tzinfo.key,
         )
 
 

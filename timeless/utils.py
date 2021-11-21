@@ -1,3 +1,8 @@
+from dataclasses import dataclass
+
+from dateutil import relativedelta
+
+
 def parse_pandas_offset_freq(offset: str) -> str:
 
     offsets = {
@@ -41,3 +46,14 @@ def parse_pandas_offset_freq(offset: str) -> str:
         raise ValueError(f"Unknown offset: {offset}")
 
     return offsets[offset]
+
+
+@dataclass
+class Weekdays:
+    monday = relativedelta.MO
+    tuesday = relativedelta.TU
+    wednesday = relativedelta.WE
+    thursday = relativedelta.TH
+    friday = relativedelta.FR
+    saturday = relativedelta.SA
+    sunday = relativedelta.SU

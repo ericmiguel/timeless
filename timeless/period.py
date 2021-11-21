@@ -1,4 +1,5 @@
 from typing import Iterator
+from typing import List
 from typing import Union
 
 from timeless.datetime import Datetime
@@ -47,3 +48,6 @@ class Period:
 
     def __iter__(self) -> Iterator[Datetime]:
         return self.period
+
+    def compute(self) -> List[Datetime]:
+        return list(self.period)
