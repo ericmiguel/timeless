@@ -8,7 +8,13 @@ Timeless is a work in progress.
 
 - ✔️ very simple API
 - ✔️ easy to extend and use with other packages
-- ✔️ built on top of standard packages and python-dateutil
+- ✔️ built on top of standard packages and [dateutil](https://github.com/dateutil/dateutil)
+
+## 📦 Installation
+
+```bash
+pip install timeless
+```
 
 ## 📝 Why use Timeless?
 
@@ -20,9 +26,9 @@ If this package is useful for you, you can say thanks staring this repo.
 
 Timeless use two main concepts: `Datetime` and `Period`. A datetime is a point in Time, and a Period is a duration.
 
-Timeless does`t differentiate between datetime and date objects.
+Timeless doesn`t differentiate between datetime and date objects.
 
-All datetimes are assumed to be in the UTC+00:00 timezone if any other timezone is specified.
+All datetimes are assumed to be in the UTC+00:00 timezone if any other timezone isn`t specified.
 
 ---
 
@@ -50,10 +56,10 @@ timeless.today()
 timeless.now()
 ```
 
-Timeless heavily uses dateutil. The difference between two dates gives you a relativedelta object:
+Timeless heavily uses [dateutil](https://github.com/dateutil/dateutil). The difference between two dates gives you a relativedelta object:
 
 ```python
-start.dif(end)
+start.diff(end)
 ```
 
 ### Periods
