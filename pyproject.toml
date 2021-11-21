@@ -9,7 +9,7 @@ module = []
 ignore_missing_imports = true
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 dateutils = "^0.6.12"
 
 [tool.poetry.dev-dependencies]
