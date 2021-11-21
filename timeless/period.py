@@ -31,14 +31,14 @@ class Period:
             return self._end
 
     @staticmethod
-    def create_period(start: Datetime, end: Datetime, freq: str) -> Iterator[Datetime]:
+    def _create_period(start: Datetime, end: Datetime, freq: str) -> Iterator[Datetime]:
         while start <= end:
             yield start
             start = start.add(**{freq: 1}) 
 
     @property
     def period(self) -> Iterator[Datetime]:
-        period = self.create_period(self._start, self.end, self.freq)
+        period = self._create_period(self._start, self.end, self.freq)
    
         return period
 
