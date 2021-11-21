@@ -47,5 +47,3 @@ class Period:
 
     def __iter__(self) -> Iterator[Datetime]:
         return self.period
-
-
