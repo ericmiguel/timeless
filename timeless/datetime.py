@@ -2,6 +2,7 @@
 
 from datetime import date as _date
 from datetime import datetime as _datetime
+from typing import Iterator
 from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
@@ -82,6 +83,19 @@ class Datetime(_datetime, _date):
             microsecond=dt.microsecond,
             zone=self.zone,
         )
+
+    def __iter__(self) -> Iterator[int]:
+        for attr in [
+            "year",
+            "month",
+            "day",
+            "hour",
+            "minute",
+            "second",
+            "microsecond",
+            "zone",
+        ]:
+            yield getattr(self, attr)
 
     def set(
         self,

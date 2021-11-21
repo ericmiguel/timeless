@@ -10,8 +10,8 @@ ignore_missing_imports = true
 
 [tool.poetry.dependencies]
 python = "^3.9"
-dateutils = "^0.6.12"
 pandas = "^1.3.4"
+python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.8.0"

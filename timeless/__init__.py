@@ -8,7 +8,7 @@ from timeless.api import now
 from timeless.api import period
 from timeless.api import to_pandas
 from timeless.api import today
-
+from timeless.api import parse
 
 # module level doc-string
 __doc__ = """

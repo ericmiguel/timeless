@@ -1,11 +1,13 @@
 from datetime import date as _date
 from datetime import datetime as _datetime
 from typing import List
+from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 
+from dateutil import parser
 from timeless import utils
 from timeless.datetime import Datetime
 from timeless.period import Period
@@ -145,3 +147,20 @@ def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Times
         return [pd.Timestamp(d) for d in dt]
     else:
         return pd.Timestamp(dt)
+
+
+def parse(
+    dt_str: str, zone: str = "UTC", fill: Optional[Datetime] = None, *args, **kwargs
+) -> Datetime:
+    parsed = parser.parse(dt_str, ignoretz=True, default=fill, *args, **kwargs)
+
+    return Datetime(
+        parsed.year,
+        parsed.month,
+        parsed.day,
+        parsed.hour,
+        parsed.minute,
+        parsed.second,
+        parsed.microsecond,
+        zone,
+    )
