@@ -7,9 +7,8 @@ Timeless is a work in progress.
 ## 🧠 Features
 
 - ✔️ very simple API
-- ✔️ few dependencies
-
-Ti probably already more actively maintained than Pendulum, unfortunately 😢
+- ✔️ easy to extend and use with other packages
+- ✔️ built on top of standard packages and python-dateutil
 
 ## 📝 Why use Timeless?
 
