@@ -2,12 +2,12 @@
 
 # flake8: noqa
 
-from api import datetime
-from api import period
-from api import to_pandas
-from api import from_pandas
-from api import today
-from api import now
+from timeless.api import datetime
+from timeless.api import period
+from timeless.api import to_pandas
+from timeless.api import from_pandas
+from timeless.api import today
+from timeless.api import now
 
 # module level doc-string
 __doc__ = """
