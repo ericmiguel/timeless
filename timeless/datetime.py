@@ -1,7 +1,7 @@
 """Friendly datetime utilities."""
 
-from datetime import date
-from datetime import datetime
+from datetime import date as _date
+from datetime import datetime as _datetime
 from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 from dateutil.relativedelta import relativedelta
 
 
-class Datetime(datetime, date):
+class Datetime(_datetime, _date):
     """..."""
 
     def __new__(
@@ -21,27 +21,23 @@ class Datetime(datetime, date):
         minute: int,
         second: int,
         microsecond: int,
-        zone: Union[ZoneInfo, str] = "UTC",
-        *args,
-        **kwargs
+        zone: Union[ZoneInfo, str] = ZoneInfo("UTC"),
     ):
         """..."""
 
         if isinstance(zone, str):
             zone = ZoneInfo(zone)
 
-        self = datetime.__new__(
+        self = _datetime.__new__(
             cls,
-            year,
-            month,
-            day,
-            hour,
-            minute,
-            second,
-            microsecond,
+            year=year,
+            month=month,
+            day=day,
+            hour=hour,
+            minute=minute,
+            second=second,
+            microsecond=microsecond,
             tzinfo=zone,
-            *args,
-            **kwargs
         )
         return self
 
@@ -55,7 +51,16 @@ class Datetime(datetime, date):
             [description]
         """
         dt = self + relativedelta(*args, **kwargs)
-        return dt
+        return self.__class__(
+            year=dt.year,
+            month=dt.month,
+            day=dt.day,
+            hour=dt.hour,
+            minute=dt.minute,
+            second=dt.second,
+            microsecond=dt.microsecond,
+            zone=self.zone,
+        )
 
     def subtract(self, *args, **kwargs) -> "Datetime":
         """
@@ -67,7 +72,16 @@ class Datetime(datetime, date):
             [description]
         """
         dt = self - relativedelta(*args, **kwargs)
-        return dt
+        return self.__class__(
+            year=dt.year,
+            month=dt.month,
+            day=dt.day,
+            hour=dt.hour,
+            minute=dt.minute,
+            second=dt.second,
+            microsecond=dt.microsecond,
+            zone=self.zone,
+        )
 
     def set(
         self,
@@ -78,7 +92,7 @@ class Datetime(datetime, date):
         minute: Optional[int] = None,
         second: Optional[int] = None,
         microsecond: Optional[int] = None,
-        zone: Optional[Union[str, ZoneInfo]] = None,
+        zone: Optional[Union[str, ZoneInfo]] = "UTC",
     ):
 
         if year is None:
@@ -129,7 +143,7 @@ class Datetime(datetime, date):
         bool
             [description]
         """
-        return self > datetime.now(tz=self.tzinfo)
+        return self > _datetime.now(tz=self.tzinfo)
 
     def is_past(self) -> bool:
         """
@@ -140,4 +154,14 @@ class Datetime(datetime, date):
         bool
             [description]
         """
-        return self < datetime.now(tz=self.tzinfo)
+        return self < _datetime.now(tz=self.tzinfo)
+
+    def isoformat(self):
+        """Return the date's ISO 8601 string."""
+        return self.isoformat()
+
+    @property
+    def zero(self):
+        """Get rid of hour, minute, second, and microsecond information."""
+        self.replace(hour=0, minute=0, second=0, microsecond=0)
+        return self

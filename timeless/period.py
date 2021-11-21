@@ -1,5 +1,5 @@
-from typing import List
-from typing import Union, Optional, Iterator
+from typing import Iterator
+from typing import Union
 
 from timeless.datetime import Datetime
 
@@ -34,12 +34,12 @@ class Period:
     def _create_period(start: Datetime, end: Datetime, freq: str) -> Iterator[Datetime]:
         while start <= end:
             yield start
-            start = start.add(**{freq: 1}) 
+            start = start.add(**{freq: 1})
 
     @property
     def period(self) -> Iterator[Datetime]:
         period = self._create_period(self._start, self.end, self.freq)
-   
+
         return period
 
     def to(self, freq: str) -> "Period":
@@ -47,3 +47,5 @@ class Period:
 
     def __iter__(self) -> Iterator[Datetime]:
         return self.period
+
+
