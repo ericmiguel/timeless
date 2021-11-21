@@ -1,24 +1,16 @@
 [tool.poetry]
-name = "tiez"
+name = "timeless"
 version = "0.1.0"
 description = "Human friendly datetime utilities."
-authors = ["ericmiguel <eric.mrib@gmail.com.br>"]
+authors = ["ericmiguel <ericmiguel@id.uff.br>"]
 
-# https://mypy.readthedocs.io/en/stable/config_file.html
 [[tool.mypy.overrides]]
-module = [
-    "pandas",
-    "boto3"
-]
+module = []
 ignore_missing_imports = true
 
 [tool.poetry.dependencies]
 python = "^3.8"
-requests = "^2.26.0"
-pydantic = "^1.8.2"
-pymongo = "^3.12.0"
 dateutils = "^0.6.12"
-boto3 = "^1.18.2"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.8.0"
@@ -29,7 +21,6 @@ flake9 = "^3.8.3"
 pre-commit = "^2.13.0"
 pytest = "^6.2.4"
 types-requests = "^2.25.0"
-types-pytz = "^2021.1.0"
 types-python-dateutil = "^0.1.4"
 
 [tool.isort]
@@ -66,7 +57,8 @@ ignore = [  # alertas e erros por conta do black
 [tool.pydocstyle]
 convention = "numpy"
 add-ignore = "D401"
-match-dir='^(tiez).*'
+match = '(?!test_|tests).*\.py'
+match-dir = "[^\tests|.].*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
