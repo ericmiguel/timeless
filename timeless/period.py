@@ -1,5 +1,5 @@
 from typing import List
-from typing import Optional
+from typing import Union, Optional, Iterator
 
 from timeless.datetime import Datetime
 
@@ -8,41 +8,42 @@ class Period:
     def __init__(
         self,
         start: Datetime,
-        end: Optional[Datetime] = None,
-        periods: Optional[int] = None,
-        unit: str = "days",
+        end: Union[int, Datetime],
+        freq: str = "days",
     ):
-        self.start = start
-        self.end = end
-        self.periods = periods
-        self.unit = unit
+        self._start = start
+        self._end = end
+        self._freq = freq
 
-    def range(self, unit: str = "days"):
-        def create_period(start: Datetime, end: Datetime, unit: str):
-            while start <= end:
-                yield start
-                start = start.add(**{unit: 1})
+    @property
+    def freq(self) -> str:
+        return self._freq
 
-        if self.end:
-            period = create_period(self.start, self.end, unit)
-        elif not self.end and self.periods:
-            self.end = self.start.add(**{unit: self.periods})
-            period = create_period(self.start, self.end, unit)
+    @property
+    def start(self) -> Datetime:
+        return self._start
+
+    @property
+    def end(self) -> Datetime:
+        if isinstance(self._end, int):
+            return self._start.add(**{self.freq: self._end - 1})
         else:
-            raise ValueError("Either 'end' or 'periods' must be provided.")
+            return self._end
 
+    @staticmethod
+    def create_period(start: Datetime, end: Datetime, freq: str) -> Iterator[Datetime]:
+        while start <= end:
+            yield start
+            start = start.add(**{freq: 1}) 
+
+    @property
+    def period(self) -> Iterator[Datetime]:
+        period = self.create_period(self._start, self.end, self.freq)
+   
         return period
 
-    def __iter__(self):
-        return self.range(self.unit)
+    def to(self, freq: str) -> "Period":
+        return Period(self.start, self.end, freq)
 
-    def add(self, amount: int, unit: str = "days"):
-        for dt in self.range():
-            yield dt.add(**{unit: amount})
-
-    def subtract(self, amount: int, unit: str = "days"):
-        for dt in self.range():
-            yield dt.subtract(**{unit: amount})
-
-    def to_list(self) -> List["Datetime"]:
-        return list(self)
+    def __iter__(self) -> Iterator[Datetime]:
+        return self.period
