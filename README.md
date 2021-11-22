@@ -16,11 +16,9 @@ Timeless is a work in progress.
 pip install timeless
 ```
 
-## 📝 Why use Timeless?
+## 📝 Why Timeless?
 
-To be quiet honest, Timeless is a weekend project. I love Pendulum, but since last year it doesnt seems to be actively maintained. For example, I missed a better type annotation suport. Subtely then I started to write Timeless for my own day-to-day use.
-
-If this package is useful for you, you can say thanks staring this repo.
+I love Pendulum, although since last year it doesn't seem to be actively maintained. If you like Pendulum, you will like Timeless. If you want a easy to adopt, integrate and expand package, you will like Timeless.
 
 ## 💻 Examples of usage
 
