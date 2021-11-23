@@ -10,6 +10,8 @@ from timeless.api import period
 from timeless.api import to_pandas
 from timeless.api import today
 from timeless.utils import Weekdays as weekdays
+from timeless.datetime import Datetime
+from timeless.period import Period
 
 
 # module level doc-string
