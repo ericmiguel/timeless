@@ -104,10 +104,11 @@ fill_date = timeless.datetime(2099, 2, 26, zone="UTC")
 timeless.parse("1900", zone="America/Sao_Paulo", fill=fill_date)
 ```
 
-Or get it as a ISO 8601 string:
+Or get it as a ISO 8601 string or any other format:
 
 ```python
-timeless.now().to_iso()
+timeless.now().format()
+timeless.now().format("%Y-%m-%d %H:%M:%S")
 ```
 
 Or find the next friday!
@@ -124,7 +125,7 @@ timeless.period(start, end.add(days=7), freq="days").to("weeks").compute()
 
 ## 🏗️ Development
 
-Botree relies on [Poetry](https://github.com/python-poetry/poetry).
+Timeless relies on [Poetry](https://github.com/python-poetry/poetry).
 
 Install the Python dependencies with:
 
@@ -135,5 +136,5 @@ poetry install
 ## ⚗️ Testing
 
 ```bash
-poetry run pytest --cov=botree tests/
+poetry run pytest --cov=timeless tests/
 ```

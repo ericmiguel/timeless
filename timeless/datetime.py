@@ -171,9 +171,11 @@ class Datetime(_datetime, _date):
         """
         return self < _datetime.now(tz=self.tzinfo)
 
-    def isoformat(self):
-        """Return the date's ISO 8601 string."""
-        return self.isoformat()
+    def format(self, format: Optional[str] = None) -> str:
+        if format is None:
+            return self.isoformat()
+
+        return self.strftime(format)
 
     @property
     def zero(self):
