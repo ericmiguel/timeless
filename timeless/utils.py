@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 
 from dateutil import relativedelta
+from typing import Optional
 
 
-def parse_pandas_offset_freq(offset: str) -> str:
+def parse_pandas_offset_freq(offset: str) -> Optional[str]:
 
     offsets = {
         "B": None,
