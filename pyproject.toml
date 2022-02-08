@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "timeless"
-version = "0.1.4"
+version = "0.1.5"
 description = "A datetime toolkit for people in a hurry."
 authors = ["ericmiguel <ericmiguel@id.uff.br>"]
 keywords = ["datetime", "datetime for humans"]
