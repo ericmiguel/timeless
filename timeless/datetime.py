@@ -6,13 +6,14 @@ from typing import Iterator
 from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
+import calendar
 
 from dateutil.relativedelta import relativedelta
 from timeless import utils
 
 
 class Datetime(_datetime, _date):
-    """..."""
+    """Timeless datetime."""
 
     def __new__(
         cls,
@@ -151,7 +152,7 @@ class Datetime(_datetime, _date):
 
     def is_future(self) -> bool:
         """
-        Check if the instance is in the future.
+        Check if the instance is in the future (within the same timezone).
 
         Returns
         -------
@@ -162,7 +163,7 @@ class Datetime(_datetime, _date):
 
     def is_past(self) -> bool:
         """
-        Check if the instance is in the past.
+        Check if the instance is in the past (within the same timezone).
 
         Returns
         -------
@@ -208,9 +209,51 @@ class Datetime(_datetime, _date):
             zone=self.zone,
         )
 
+    def get_last(self, weekday: str) -> "Datetime":
+        weekday_ = utils.Weekdays.__dict__[weekday](-1)
+        next_weekday = self + relativedelta(weekday=weekday_)
+
+        return self.__class__(
+            next_weekday.year,
+            next_weekday.month,
+            next_weekday.day,
+            0,
+            0,
+            0,
+            0,
+            zone=self.zone,
+        )
+
+    def get_weekday_name(self, first_weekday: Optional[str] = None) -> str:
+        if first_weekday:
+            calendar.setfirstweekday(utils.Weekdays.__dict__[first_weekday])
+
+        numeric_weekday = self.weekday()
+        weekday_name = calendar.day_name[numeric_weekday]
+        return weekday_name
+
+    @property
+    def days_in_month(self):
+        return calendar.monthrange(self.year, self.month)[1]
+
+    def get_days_in_month(self):
+        return self.days_in_month
+
+    def get_first_in_month(self, weekday: str, **kwargs) -> "Datetime":
+        instance_weekday = self.get_weekday_name(kwargs.get("first_weekday"))
+
+        if instance_weekday.lower() == weekday.lower():
+            return self
+        else:
+            last_in_month = self.get_last(weekday)
+            if last_in_month.month != self.month:
+                return self.get_next(weekday)
+            else:
+                return last_in_month
+
     def to_datetime(self) -> _datetime:
         """
-        Convert the instance to a datetime object.
+        Convert a timeless.Datetime to a datetime object.
 
         Returns
         -------
