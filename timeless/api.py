@@ -34,8 +34,8 @@ def datetime(
     return Datetime(year, month, day, hour, minute, second, microsecond, zone)
 
 
-def period(*args, **kwargs):
-    return Period(*args, **kwargs)
+def period(start: Datetime, end: Union[int, Datetime], freq: str = "days"):
+    return Period(start, end, freq)
 
 
 def now(zone: str = "UTC") -> Datetime:
