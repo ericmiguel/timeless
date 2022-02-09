@@ -1,7 +1,7 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from dateutil import relativedelta
-from typing import Optional
 
 
 def parse_pandas_offset_freq(offset: str) -> Optional[str]:
