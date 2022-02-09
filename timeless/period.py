@@ -1,53 +1,110 @@
-from typing import Iterator
-from typing import List
+"""Friendly time span utilities."""
 from typing import Union
 
+
 from timeless.datetime import Datetime
+from dateutil.relativedelta import relativedelta
+from datetime import timedelta
 
 
-class Period:
+class Period(list):
     def __init__(
         self,
         start: Datetime,
         end: Union[int, Datetime],
         freq: str = "days",
+        step: int = 1,
     ):
-        self._start = start
-        self._end = end
-        self._freq = freq
+        self.start = start
+        self.end = end
+        self.freq = freq
+        self.step = step
 
-    @property
-    def freq(self) -> str:
-        return self._freq
+        if isinstance(end, int):
+            end = start.add(**{freq: end})
 
-    @property
-    def start(self) -> Datetime:
-        return self._start
+        list.__init__(self)
 
-    @property
-    def end(self) -> Datetime:
-        if isinstance(self._end, int):
-            return self._start.add(**{self.freq: self._end - 1})
-        else:
-            return self._end
+        self.append(start)
+        while start < end:
+            start = start.add(**{freq: step})
+            self.append(start)
 
-    @staticmethod
-    def _create_period(start: Datetime, end: Datetime, freq: str) -> Iterator[Datetime]:
-        while start <= end:
-            yield start
-            start = start.add(**{freq: 1})
+    def append(self, item: Datetime):
 
-    @property
-    def period(self) -> Iterator[Datetime]:
-        period = self._create_period(self._start, self.end, self.freq)
+        if not isinstance(item, Datetime):
+            raise ValueError("Only Datetime instances allowed")
 
-        return period
+        if item in self:
+            raise TypeError("Period cannot have duplicate items")
 
-    def to(self, freq: str) -> "Period":
-        return Period(self.start, self.end, freq)
+        super(Period, self).append(item)
+        self.start = min(self)
+        self.end = max(self)
 
-    def __iter__(self) -> Iterator[Datetime]:
-        return self.period
+    def insert(self, index: int, item: Datetime):
 
-    def compute(self) -> List[Datetime]:
-        return list(self.period)
+        if not isinstance(item, Datetime):
+            raise ValueError("Only Datetime instances allowed")
+
+        if item in self:
+            raise TypeError("Period cannot have duplicate items")
+
+        super(Period, self).insert(index, item)
+        self.start = min(self)
+        self.end = max(self)
+
+    def __add__(self, other) -> "Period":
+        if isinstance(other, relativedelta):
+            delta = {
+                "years": other.years,
+                "months": other.months,
+                "days": other.days,
+                "hours": other.hours,
+                "minutes": other.minutes,
+                "seconds": other.seconds,
+                "microseconds": other.microseconds,
+            }
+            start = self.start.add(**delta)
+            end = self.end.add(**delta)  # type: ignore
+            return self.__class__(start, end, self.freq, self.step)
+
+        return NotImplemented
+
+    def shift(
+        self,
+        years: int = 0,
+        months: int = 0,
+        days: int = 0,
+        hours: int = 0,
+        minutes: int = 0,
+        seconds: int = 0,
+        microseconds: int = 0,
+    ):
+        return self + relativedelta(
+            years=years,
+            months=months,
+            days=days,
+            hours=hours,
+            minutes=minutes,
+            seconds=seconds,
+            microseconds=microseconds,
+        )
+
+    def __sub__(self, other) -> "Period":
+        return self.__add__(other)
+
+    def __lt__(self, item) -> bool:
+        raise NotImplementedError
+
+    def __le__(self, item) -> bool:
+        raise NotImplementedError
+
+    def __eq__(self, item) -> bool:
+        raise NotImplementedError
+
+    def __gt__(self, item) -> bool:
+        raise NotImplementedError
+
+    def __ge__(self, item) -> bool:
+        raise NotImplementedError
