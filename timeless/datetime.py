@@ -1,12 +1,13 @@
 """Friendly datetime utilities."""
 
+import calendar
+
 from datetime import date as _date
 from datetime import datetime as _datetime
 from typing import Iterator
 from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
-import calendar
 
 from dateutil.relativedelta import relativedelta
 from timeless import utils
@@ -44,7 +45,16 @@ class Datetime(_datetime, _date):
         )
         return self
 
-    def add(self, *args, **kwargs) -> "Datetime":
+    def add(
+        self,
+        years: int = 0,
+        months: int = 0,
+        days: int = 0,
+        hours: int = 0,
+        minutes: int = 0,
+        seconds: int = 0,
+        microseconds: int = 0,
+    ) -> "Datetime":
         """
         Add duration to the instance.
 
@@ -53,7 +63,15 @@ class Datetime(_datetime, _date):
         [type]
             [description]
         """
-        dt = self + relativedelta(*args, **kwargs)
+        dt = self + relativedelta(
+            years=years,
+            months=months,
+            days=days,
+            hours=hours,
+            minutes=minutes,
+            seconds=seconds,
+            microseconds=microseconds,
+        )
         return self.__class__(
             year=dt.year,
             month=dt.month,
@@ -65,7 +83,16 @@ class Datetime(_datetime, _date):
             zone=self.zone,
         )
 
-    def subtract(self, *args, **kwargs) -> "Datetime":
+    def subtract(
+        self,
+        years: int = 0,
+        months: int = 0,
+        days: int = 0,
+        hours: int = 0,
+        minutes: int = 0,
+        seconds: int = 0,
+        microseconds: int = 0,
+    ) -> "Datetime":
         """
         Remove duration from the instance.
 
@@ -74,7 +101,7 @@ class Datetime(_datetime, _date):
         [type]
             [description]
         """
-        dt = self - relativedelta(*args, **kwargs)
+        dt = self - relativedelta(years=years, months=months, days=days, hours=hours, minutes=minutes, seconds=seconds, microseconds=microseconds)
         return self.__class__(
             year=dt.year,
             month=dt.month,

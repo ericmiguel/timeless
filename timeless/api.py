@@ -85,7 +85,8 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
         if dt.freq:
             freq = utils.parse_pandas_offset_freq(dt.freq.name)
         else:
-            raise ValueError("No frequency found in DatetimeIndex")
+            freq = "day"
+            # raise ValueError("No frequency found in DatetimeIndex")
 
         _start = dt.min().to_pydatetime()
         _end = dt.max().to_pydatetime()
@@ -171,4 +172,20 @@ def parse(
         parsed.second,
         parsed.microsecond,
         zone,
+    )
+
+
+def from_datetime(
+    datetime: _datetime, zone: Union[ZoneInfo, str] = ZoneInfo("UTC")
+) -> Datetime:
+
+    return Datetime(
+        year=datetime.year,
+        month=datetime.month,
+        day=datetime.day,
+        hour=datetime.hour,
+        minute=datetime.minute,
+        second=datetime.second,
+        microsecond=datetime.microsecond,
+        zone=zone,
     )
