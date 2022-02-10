@@ -1,4 +1,4 @@
-"""Friendly time span utilities."""
+"""Friendly interface for time span manipulations."""
 
 from typing import Union
 
@@ -33,21 +33,19 @@ class Period(list):
 
     def append(self, item: Datetime) -> None:
         """
-        [summary]
-
-        [extended_summary]
+        Append a datetime instance to the end of the period.
 
         Parameters
         ----------
         item : Datetime
-            [description]
+            Datetime instance to append.
 
         Raises
         ------
         ValueError
-            [description]
+            Only Datetime instances allowed.
         TypeError
-            [description]
+            Periods cannot have duplicate items.
         """
         if not isinstance(item, Datetime):
             raise ValueError("Only Datetime instances allowed")
@@ -61,23 +59,21 @@ class Period(list):
 
     def insert(self, index: int, item: Datetime) -> None:
         """
-        [summary]
-
-        [extended_summary]
+        Insert a datetime instance at the given index.
 
         Parameters
         ----------
         index : int
-            [description]
+            List index to insert at.
         item : Datetime
-            [description]
+            Datetime instance to insert.
 
         Raises
         ------
         ValueError
-            [description]
+            Only Datetime instances allowed.
         TypeError
-            [description]
+            Periods cannot have duplicate items.
         """
         if not isinstance(item, Datetime):
             raise ValueError("Only Datetime instances allowed")
@@ -90,6 +86,16 @@ class Period(list):
         self.end = max(self)
 
     def __add__(self, other) -> "Period":
+        """
+        Sum a given timedelta to the period.
+
+        Currently only supports relativedelta.
+
+        Returns
+        -------
+        Period
+            New period with the given timedelta added.
+        """
         if isinstance(other, relativedelta):
             delta = {
                 "years": other.years,
@@ -115,7 +121,34 @@ class Period(list):
         minutes: int = 0,
         seconds: int = 0,
         microseconds: int = 0,
-    ):
+    ) -> "Period":
+        """
+        Convenience method to sum or subtract a timedelta from the period.
+
+        Currently only supports relativedelta.
+
+        Parameters
+        ----------
+        years : int, optional
+            years delta, by default 0
+        months : int, optional
+            months delta, by default 0
+        days : int, optional
+            days delta, by default 0
+        hours : int, optional
+            hours delta, by default 0
+        minutes : int, optional
+            minutes delta, by default 0
+        seconds : int, optional
+            seconds delta, by default 0
+        microseconds : int, optional
+            microseconds delta, by default 0
+
+        Returns
+        -------
+        Period
+            New period with the given timedelta added.
+        """
         return self + relativedelta(
             years=years,
             months=months,

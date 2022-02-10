@@ -1,4 +1,4 @@
-"""Friendly datetime utilities."""
+"""Friendly interface for datetime manipulations."""
 
 import calendar
 
@@ -27,6 +27,7 @@ class Datetime(_datetime, _date):
         microsecond: int = 0,
         zone: Union[ZoneInfo, str] = ZoneInfo("UTC"),
     ):
+        """Controls the instance creation."""
         if isinstance(zone, str):
             zone = ZoneInfo(zone)
 
@@ -58,8 +59,8 @@ class Datetime(_datetime, _date):
 
         Returns
         -------
-        [type]
-            [description]
+        Datetime
+            New datetime instance with added value.
         """
         dt = self + relativedelta(
             years=years,
@@ -92,12 +93,12 @@ class Datetime(_datetime, _date):
         microseconds: int = 0,
     ) -> "Datetime":
         """
-        Remove duration from the instance.
+        Remove duration to the instance.
 
         Returns
         -------
-        [type]
-            [description]
+        Datetime
+            New datetime instance with the subtracted value.
         """
         dt = self - relativedelta(
             years=years,
@@ -120,6 +121,14 @@ class Datetime(_datetime, _date):
         )
 
     def __iter__(self) -> Iterator[int]:
+        """
+        Allow iteration over the instance.
+
+        Yields
+        ------
+        Iterator[int]
+            Instance values.
+        """
         for attr in [
             "year",
             "month",
@@ -142,8 +151,34 @@ class Datetime(_datetime, _date):
         second: Optional[int] = None,
         microsecond: Optional[int] = None,
         zone: Optional[Union[str, ZoneInfo]] = "UTC",
-    ):
+    ) -> "Datetime":
+        """
+        Override the instance values.
 
+        Parameters
+        ----------
+        year : Optional[int], optional
+            new year value, by default None
+        month : Optional[int], optional
+            new month value, by default None
+        day : Optional[int], optional
+            new day value, by default None
+        hour : Optional[int], optional
+            new hour value, by default None
+        minute : Optional[int], optional
+            new minute value, by default None
+        second : Optional[int], optional
+            new second value, by default None
+        microsecond : Optional[int], optional
+            new microsecond value, by default None
+        zone : Optional[Union[str, ZoneInfo]], optional
+            new timezone value, by default "UTC"
+
+        Returns
+        -------
+        Datetime
+            New instance with the new values.
+        """
         if year is None:
             year = self.year
         if month is None:
@@ -169,17 +204,25 @@ class Datetime(_datetime, _date):
 
     @property
     def zone(self) -> str:
+        """
+        Get the timezone name.
+
+        Returns
+        -------
+        str
+            Timezone name.
+        """
         return str(self.tzinfo)
 
     @property
     def zone_info(self) -> ZoneInfo:
         """
-        Return the timezone object.
+        Get the timezone object.
 
         Returns
         -------
         ZoneInfo
-            [description]
+            Timezone object.
         """
         return ZoneInfo(self.zone)
 
@@ -190,7 +233,7 @@ class Datetime(_datetime, _date):
         Returns
         -------
         bool
-            [description]
+            is the instance in the future (relative to now).
         """
         return self > _datetime.now(tz=self.tzinfo)
 
@@ -201,11 +244,24 @@ class Datetime(_datetime, _date):
         Returns
         -------
         bool
-            [description]
+            is the instance in the past (relative to now).
         """
         return self < _datetime.now(tz=self.tzinfo)
 
     def format(self, format: Optional[str] = None) -> str:
+        """
+        Format the instance as a string to isoformat or custom format.
+
+        Parameters
+        ----------
+        format : Optional[str], optional
+            Follows the same rules as the python strftime, by default None
+
+        Returns
+        -------
+        str
+            Datetime formated string.
+        """
         if format is None:
             return self.isoformat()
 
@@ -220,14 +276,29 @@ class Datetime(_datetime, _date):
         """
         Get the difference between the instance and another.
 
+        Parameters
+        ----------
+        other : Datetime
+            Other datetime instance to compare to.
+
         Returns
         -------
-        Datetime
-            [description]
+        relativedelta
+            Delta between the two instances.
         """
         return relativedelta(self, other)
 
     def get_next(self, weekday: str) -> "Datetime":
+        """
+        Convenience method to get the next instance of a given weekday.
+
+        Does't consider the current day.
+
+        Returns
+        -------
+        Datetime
+            Next closest given weekday.
+        """
         weekday_ = utils.Weekdays.__dict__[weekday]
         next_weekday = self + relativedelta(days=1, weekday=weekday_)
 
@@ -243,6 +314,14 @@ class Datetime(_datetime, _date):
         )
 
     def get_last(self, weekday: str) -> "Datetime":
+        """
+        Convenience method to get the last instance of a given weekday.
+
+        Returns
+        -------
+        Datetime
+            Last closest given weekday.
+        """
         weekday_ = utils.Weekdays.__dict__[weekday](-1)
         next_weekday = self + relativedelta(weekday=weekday_)
 
@@ -257,23 +336,85 @@ class Datetime(_datetime, _date):
             zone=self.zone,
         )
 
-    def get_weekday_name(self, first_weekday: Optional[str] = None) -> str:
-        if first_weekday:
-            calendar.setfirstweekday(utils.Weekdays.__dict__[first_weekday])
+    def get_weekday_name(self, week_start: Optional[str] = None) -> str:
+        """
+        Get the weekday name of the instance.
+
+        Parameters
+        ----------
+        week_start : Optional[str], optional
+            First day of the week, by default None (monday)
+
+        Returns
+        -------
+        str
+            [description]
+        """
+        if week_start:
+            calendar.setfirstweekday(utils.Weekdays.__dict__[week_start])
 
         numeric_weekday = self.weekday()
         weekday_name = calendar.day_name[numeric_weekday]
-        return weekday_name
+        return weekday_name.lower()
+
+    def is_today(self, weekday: str, week_start: Optional[str] = None) -> bool:
+        """
+        Check if the instance weekday is at a given weekday.
+
+        Parameters
+        ----------
+        weekday : str
+            Weekday to check against.
+        week_start : Optional[str], optional
+            First day of the week, by default None (monday).
+
+        Returns
+        -------
+        bool
+            True if the instance weekday is at the given weekday.
+        """
+        instance_weekday = self.get_weekday_name(week_start=week_start)
+
+        if weekday.lower() == instance_weekday:
+            return True
+
+        return False
 
     @property
-    def days_in_month(self):
+    def days_in_month(self) -> int:
+        """
+        Number of days in the month of the instance.
+
+        Returns
+        -------
+        int
+            Total days in the instance month.
+        """
         return calendar.monthrange(self.year, self.month)[1]
 
-    def get_days_in_month(self):
+    def get_days_in_month(self) -> int:
+        """
+        Convenience method to days_in_month.
+
+        Returns
+        -------
+        int
+            Total days in the instance month.
+        """
         return self.days_in_month
 
-    def get_first_in_month(self, weekday: str, **kwargs) -> "Datetime":
-        instance_weekday = self.get_weekday_name(kwargs.get("first_weekday"))
+    def get_first_in_month(
+        self, weekday: str, week_start: Optional[str] = None
+    ) -> "Datetime":
+        """
+        Get the first occourance of a weekday at the instance month.
+
+        Returns
+        -------
+        Datetime
+            First occourance of the given weekday at the instance month.
+        """
+        instance_weekday = self.get_weekday_name(week_start)
 
         if instance_weekday.lower() == weekday.lower():
             return self
@@ -292,12 +433,12 @@ def now(zone: str = "UTC") -> Datetime:
     Parameters
     ----------
     zone : Optional[str], optional
-        [description], by default None
+        Instance timezone, by default "UTC"
 
     Returns
     -------
     Datetime
-        [description]
+        Current date and time.
     """
     dt_ = _datetime.now(tz=ZoneInfo(zone))
     dt = Datetime(
@@ -315,5 +456,20 @@ def now(zone: str = "UTC") -> Datetime:
 
 
 def today(zone: str = "UTC") -> Datetime:
+    """
+    Get a DateTime instance for the current date.
+
+    Hours, minutes, seconds and microseconds are set to 0.
+
+    Parameters
+    ----------
+    zone : str, optional
+        Instance timezone, by default "UTC"
+
+    Returns
+    -------
+    Datetime
+        Current date.
+    """
     dt = _date.today()
     return Datetime(dt.year, dt.month, dt.day, 0, 0, 0, 0, zone)
