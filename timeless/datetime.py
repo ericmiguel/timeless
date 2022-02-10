@@ -408,6 +408,7 @@ class Datetime(_datetime, _date):
         """
         return self.days_in_month
 
+
 def now(zone: str = "UTC") -> Datetime:
     """
     Get a DateTime instance for the current date and time.
@@ -455,3 +456,35 @@ def today(zone: str = "UTC") -> Datetime:
     """
     dt = _date.today()
     return Datetime(dt.year, dt.month, dt.day, 0, 0, 0, 0, zone)
+
+
+def get_first_weekday_in_month(
+    datetime: Datetime, weekday: str, week_start: Optional[str] = None
+) -> "Datetime":
+    """
+    Get the first occourance of a weekday at the instance month.
+
+    Parameters
+    ----------
+    datetime : Datetime
+        Datetime instance.
+    weekday: str
+        weekday name.
+    week_start : Optional[str], optional
+        week start day, by default None (monday)
+
+    Returns
+    -------
+    Datetime
+        First occourance of the given weekday at the instance month.
+    """
+    instance_weekday = datetime.get_weekday_name(week_start)
+
+    if instance_weekday.lower() == weekday.lower():
+        return datetime
+    else:
+        last_in_month = datetime.get_last(weekday)
+        if last_in_month.month != datetime.month:
+            return datetime.get_next(weekday)
+        else:
+            return last_in_month
