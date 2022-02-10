@@ -71,6 +71,7 @@ class Datetime(_datetime, _date):
             seconds=seconds,
             microseconds=microseconds,
         )
+
         return self.__class__(
             year=dt.year,
             month=dt.month,
@@ -271,6 +272,10 @@ class Datetime(_datetime, _date):
     def zero(self):
         """Get rid of hour, minute, second, and microsecond information."""
         return self.set(hour=0, minute=0, second=0, microsecond=0, zone=self.zone)
+
+    def set_zero(self):
+        """Convenience method to zero property."""
+        return self.zero
 
     def diff(self, other: "Datetime") -> relativedelta:
         """

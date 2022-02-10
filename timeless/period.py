@@ -1,7 +1,5 @@
 """Friendly interface for time span manipulations."""
 
-from typing import Union
-
 from dateutil.relativedelta import relativedelta
 from timeless.datetime import Datetime
 
@@ -12,7 +10,7 @@ class Period(list):
     def __init__(
         self,
         start: Datetime,
-        end: Union[int, Datetime],
+        end: Datetime,
         freq: str = "days",
         step: int = 1,
     ):
@@ -22,9 +20,6 @@ class Period(list):
         self.end = end
         self.freq = freq
         self.step = step
-
-        if isinstance(end, int):
-            end = start.add(**{freq: end})
 
         self.append(start)
         while start < end:
@@ -107,10 +102,25 @@ class Period(list):
                 "microseconds": other.microseconds,
             }
             start = self.start.add(**delta)
-            end = self.end.add(**delta)  # type: ignore
+            end = self.end.add(**delta)
             return self.__class__(start, end, self.freq, self.step)
 
         return NotImplemented
+
+    def __sub__(self, other) -> "Period":
+        """
+        Sum (subtract) a given timedelta to the period.
+
+        Currently only supports relativedelta.
+
+        Uses the __add__ method, since relativedelta can be positive or negative.
+
+        Returns
+        -------
+        Period
+            New period with the given timedelta added.
+        """
+        return self.__add__(other)
 
     def shift(
         self,
@@ -159,20 +169,54 @@ class Period(list):
             microseconds=microseconds,
         )
 
-    def __sub__(self, other) -> "Period":
-        return self.__add__(other)
+    @property
+    def duration(self) -> float:
+        """
+        Total duration of the period in seconds.
 
-    def __lt__(self, item) -> bool:
-        raise NotImplementedError
+        Returns
+        -------
+        float
+            total seconds in the time span.
+        """
+        delta = self.start - self.end
+        return abs(delta.total_seconds())
 
-    def __le__(self, item) -> bool:
-        raise NotImplementedError
+    def get_duration(self) -> float:
+        """Convenience method to duration property."""
+        return self.duration
 
-    def __eq__(self, item) -> bool:
-        raise NotImplementedError
+    def lt(self, other: "Period") -> bool:
+        """Less than."""
+        if self.duration < other.duration:
+            return True
 
-    def __gt__(self, item) -> bool:
-        raise NotImplementedError
+        return False
 
-    def __ge__(self, item) -> bool:
-        raise NotImplementedError
+    def le(self, other: "Period") -> bool:
+        """Less than or equal."""
+        if self.duration <= other.duration:
+            return True
+
+        return False
+
+    def eq(self, other: "Period") -> bool:
+        """Equal."""
+        if self.duration == other.duration:
+            return True
+
+        return False
+
+    def gt(self, other: "Period") -> bool:
+        """Greater than."""
+        if self.duration > other.duration:
+            return True
+
+        return False
+
+    def ge(self, other: "Period") -> bool:
+        """Greater than or equal."""
+        if self.duration >= other.duration:
+            return True
+
+        return False
