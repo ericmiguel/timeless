@@ -1,4 +1,4 @@
-"""..."""
+"""Timeless - a datetime toolkit for people in a hurry."""
 
 # flake8: noqa
 from timeless.converters import from_datetime
@@ -15,7 +15,7 @@ from timeless.utils import Weekdays as weekdays
 
 # module level doc-string
 __doc__ = """
-timeless - a datetime toolkit for people in a hurry.
+Timeless - a datetime toolkit for people in a hurry.
 =====================================================================
 
 **timeless** sits on sholders of giants to provide a simple and easy to use datetime
