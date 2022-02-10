@@ -21,7 +21,7 @@ def to_datetime(datetime: _datetime) -> _datetime:
     Returns
     -------
     _datetime
-        [description]
+        Python's default datetime object.
     """
     return _datetime(
         year=datetime.year,
@@ -38,7 +38,21 @@ def to_datetime(datetime: _datetime) -> _datetime:
 def from_datetime(
     datetime: _datetime, zone: Union[ZoneInfo, str] = ZoneInfo("UTC")
 ) -> Datetime:
+    """
+    Convert a datetime object to a timeless.Datetime.
 
+    Parameters
+    ----------
+    datetime : _datetime
+        Python's default datetime object.
+    zone : Union[ZoneInfo, str], optional
+        Timezone, by default ZoneInfo("UTC")
+
+    Returns
+    -------
+    Datetime
+        Timeless datetime
+    """
     return Datetime(
         year=datetime.year,
         month=datetime.month,
@@ -53,12 +67,17 @@ def from_datetime(
 
 def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Period]:
     """
-    Get a Datetime instance from a pandas.Timestamp.
+    Creates a Datetime instance from a pandas.Timestamp or a pandas.DateTimeIndex.
+
+    Parameters
+    ----------
+    dt : Union[pd.DatetimeIndex, pd.Timestamp]
+        Pandas instance.
 
     Returns
     -------
-    Datetime
-        [description]
+    Union[Datetime, Period]
+        Datetime or Period (time span) instance.
     """
     if isinstance(dt, pd.DatetimeIndex):
         freq = None
@@ -127,16 +146,21 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
 
 def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Timestamp]:
     """
-    Get a pandas.Timestamp instance from a Datetime.
+    Creates a pandas.Timestamp instance from a Datetime.
 
     Periods are converted to a list of pandas.Timestamp instances.
 
     Lists of Timestamps are automatically coerced DatetimeIndex by Pandas.
 
+    Parameters
+    ----------
+    dt : Union[Period, Datetime]
+        Timeless Datetime or Period instance.
+
     Returns
     -------
-    pd.Timestamp
-        [description]
+    Union[List[pd.Timestamp], pd.Timestamp]
+        Pandas time instances.
     """
     if isinstance(dt, Period):
         return [pd.Timestamp(d) for d in dt]
@@ -145,9 +169,26 @@ def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Times
 
 
 def parse(
-    dt_str: str, zone: str = "UTC", fill: Optional[Datetime] = None, *args, **kwargs
+    string: str, zone: str = "UTC", fill: Optional[Datetime] = None, *args, **kwargs
 ) -> Datetime:
-    parsed = parser.parse(dt_str, ignoretz=True, default=fill, *args, **kwargs)
+    """
+    Parse a datetime string.
+
+    Parameters
+    ----------
+    string : str
+        Datetime string representation.
+    zone : str, optional
+        Timezone, by default "UTC"
+    fill : Optional[Datetime], optional
+        Fill lacking values using other object, by default None
+
+    Returns
+    -------
+    Datetime
+        Parsed Timeless Datetime.
+    """
+    parsed = parser.parse(string, ignoretz=True, default=fill, *args, **kwargs)
 
     return Datetime(
         parsed.year,
