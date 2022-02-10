@@ -1,3 +1,5 @@
+#!/bin/bash
+
 FAILED=false
 
 # requirements
