@@ -328,7 +328,7 @@ class Datetime(_datetime, _date):
             Last closest given weekday.
         """
         weekday_ = utils.Weekdays.__dict__[weekday](-1)
-        next_weekday = self + relativedelta(weekday=weekday_)
+        next_weekday = self + relativedelta(days=-1, weekday=weekday_)
 
         return self.__class__(
             next_weekday.year,
@@ -407,29 +407,6 @@ class Datetime(_datetime, _date):
             Total days in the instance month.
         """
         return self.days_in_month
-
-    def get_first_in_month(
-        self, weekday: str, week_start: Optional[str] = None
-    ) -> "Datetime":
-        """
-        Get the first occourance of a weekday at the instance month.
-
-        Returns
-        -------
-        Datetime
-            First occourance of the given weekday at the instance month.
-        """
-        instance_weekday = self.get_weekday_name(week_start)
-
-        if instance_weekday.lower() == weekday.lower():
-            return self
-        else:
-            last_in_month = self.get_last(weekday)
-            if last_in_month.month != self.month:
-                return self.get_next(weekday)
-            else:
-                return last_in_month
-
 
 def now(zone: str = "UTC") -> Datetime:
     """
