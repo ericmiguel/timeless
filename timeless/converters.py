@@ -1,10 +1,14 @@
+import warnings
+
 from datetime import datetime as _datetime
 from typing import List
+from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 
+from dateutil import parser
 from timeless import utils
 from timeless.datetime import Datetime
 from timeless.period import Period
@@ -57,10 +61,12 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
         [description]
     """
     if isinstance(dt, pd.DatetimeIndex):
+        freq = None
+
         if dt.freq:
             freq = utils.parse_pandas_offset_freq(dt.freq.name)
         else:
-            freq = "day"
+            pass
             # raise ValueError("No frequency found in DatetimeIndex")
 
         _start = dt.min().to_pydatetime()
@@ -92,6 +98,11 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
             _end.microsecond,
             _end.tzinfo.key,
         )
+
+        if freq is None:
+            warnings.warn("No frequency found in DatetimeIndex: assuming 'days'.")
+            freq = "days"
+
         return Period(start, end, freq)
 
     else:
@@ -131,3 +142,20 @@ def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Times
         return [pd.Timestamp(d) for d in dt]
     else:
         return pd.Timestamp(dt)
+
+
+def parse(
+    dt_str: str, zone: str = "UTC", fill: Optional[Datetime] = None, *args, **kwargs
+) -> Datetime:
+    parsed = parser.parse(dt_str, ignoretz=True, default=fill, *args, **kwargs)
+
+    return Datetime(
+        parsed.year,
+        parsed.month,
+        parsed.day,
+        parsed.hour,
+        parsed.minute,
+        parsed.second,
+        parsed.microsecond,
+        zone,
+    )

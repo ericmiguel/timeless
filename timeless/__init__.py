@@ -1,14 +1,14 @@
 """..."""
 
 # flake8: noqa
-from timeless.api import now
-from timeless.api import parse
-from timeless.api import today
 from timeless.converters import from_datetime
 from timeless.converters import from_pandas
+from timeless.converters import parse
 from timeless.converters import to_datetime
 from timeless.converters import to_pandas
 from timeless.datetime import Datetime as datetime
+from timeless.datetime import now
+from timeless.datetime import today
 from timeless.period import Period as period
 from timeless.utils import Weekdays as weekdays
 

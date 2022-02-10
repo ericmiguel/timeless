@@ -283,3 +283,37 @@ class Datetime(_datetime, _date):
                 return self.get_next(weekday)
             else:
                 return last_in_month
+
+
+def now(zone: str = "UTC") -> Datetime:
+    """
+    Get a DateTime instance for the current date and time.
+
+    Parameters
+    ----------
+    zone : Optional[str], optional
+        [description], by default None
+
+    Returns
+    -------
+    Datetime
+        [description]
+    """
+    dt_ = _datetime.now(tz=ZoneInfo(zone))
+    dt = Datetime(
+        dt_.year,
+        dt_.month,
+        dt_.day,
+        dt_.hour,
+        dt_.minute,
+        dt_.second,
+        dt_.microsecond,
+        zone,
+    )
+
+    return dt
+
+
+def today(zone: str = "UTC") -> Datetime:
+    dt = _date.today()
+    return Datetime(dt.year, dt.month, dt.day, 0, 0, 0, 0, zone)
