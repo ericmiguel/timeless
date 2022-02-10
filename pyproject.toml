@@ -9,7 +9,7 @@ license = "MIT"
 repository = "https://github.com/ericmiguel/timeless"
 
 [[tool.mypy.overrides]]
-module = []
+module = ["pandas"]
 ignore_missing_imports = true
 
 [tool.poetry.dependencies]
@@ -27,6 +27,9 @@ pre-commit = "^2.13.0"
 pytest = "^6.2.4"
 types-requests = "^2.25.0"
 types-python-dateutil = "^0.1.4"
+mkdocs = "^1.2.3"
+mkdocs-material = "^8.1.10"
+autoflake = "^1.4"
 
 [tool.isort]
 profile = "black"
