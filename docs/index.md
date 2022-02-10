@@ -1,4 +1,6 @@
-# Timeless - a datetime toolkit for people in a hurry.
+# Timeless
+
+A datetime toolkit for people in a hurry.
 
 **Timeless** sits on sholders of giants to provide a simple and easy to use datetime
 toolkit. Simple date ranges, datetime operations and just one import.
@@ -33,7 +35,7 @@ Timeless doesn`t differentiate between datetime and date objects.
 
 All datetimes are assumed to be in the UTC+00:00 timezone if any other timezone isn`t specified.
 
-```python
+```py linenums="1"
 import timeless
 
 start = timeless.datetime(1900, 1, 1, zone="UTC")
@@ -46,24 +48,4 @@ start.set(year=2099, month=2, day=26, hour=5, zone="America/Sao_Paulo")
 start.is_past()  # True
 start.is_future()  # False
 start.set(year=2099).is_future()  # True
-```
-
-## 📜 Docs
-
-The docs are under development, but it's (very) early stage is already [available](https://ericmiguel.github.io/timeless/).
-
-## 🏗️ Development
-
-Timeless relies on [Poetry](https://github.com/python-poetry/poetry).
-
-Install the Python dependencies with:
-
-```bash
-poetry install
-```
-
-## ⚗️ Testing
-
-```bash
-poetry run pytest --cov=timeless tests/
 ```

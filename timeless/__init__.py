@@ -18,9 +18,8 @@ from timeless.utils import Weekdays as weekdays
 __doc__ = """
 Timeless - a datetime toolkit for people in a hurry.
 =====================================================================
+**Timeless** sits on sholders of giants to provide a simple and easy to use datetime
+toolkit. Simple date ranges, datetime operations and just one import.
 
-**timeless** sits on sholders of giants to provide a simple and easy to use datetime
-toolkit to easly perform datetime operations like create time ranges, add and subtract.
-It tries to be as simple as possible abstracting some anoying details like timezones 
-and multiple date objects types like timestamps, date, datetime, etc.
+This package is a work in progress and it was created as a study object.
 """

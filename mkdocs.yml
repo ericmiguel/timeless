@@ -1,0 +1,40 @@
+site_name: Timeless
+site_url: https://ericmiguel.github.io/timeless
+site_description: Timeless - a datetime toolkit for people in a hurry
+copyright: Copyright &copy; 2022 Eric Miguel
+
+theme:
+  name: material
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - toc.integrate
+    - content.code.annotate 
+
+repo_name: ericmiguel/timeless
+repo_url: https://github.com/ericmiguel/timeless
+
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin 
+      link: https://www.linkedin.com/in/ericmrib
+    - icon: fontawesome/brands/github
+      link: https://github.com/ericmiguel
+
+nav:
+- Timeless: index.md
+- Datetime:
+  - Datetime basics: datetime/basic.md
+- Period:
+  - Period basics: period/basic.md
+- Converters:
+  - Python's default datetime and Timeless: converters/default_datetime.md
+  - Pandas and Timeless: converters/pandas.md
+
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
