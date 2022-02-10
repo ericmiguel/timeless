@@ -1,11 +1,30 @@
+"""Convenience functions, mostly for internal use."""
+
 from dataclasses import dataclass
+from typing import Optional
 
 from dateutil import relativedelta
-from typing import Optional
 
 
 def parse_pandas_offset_freq(offset: str) -> Optional[str]:
+    """
+    Maps pandas offset strings to timeless.Datetime strings.
 
+    Parameters
+    ----------
+    offset : str
+        Pandas offset string.
+
+    Returns
+    -------
+    Optional[str]
+        Timeless offset string.
+
+    Raises
+    ------
+    ValueError
+        Invalid or unknown offset string.
+    """
     offsets = {
         "B": None,
         "C": None,
@@ -51,6 +70,8 @@ def parse_pandas_offset_freq(offset: str) -> Optional[str]:
 
 @dataclass
 class Weekdays:
+    """Weekdays mapping for easy acess."""
+
     monday = relativedelta.MO
     tuesday = relativedelta.TU
     wednesday = relativedelta.WE

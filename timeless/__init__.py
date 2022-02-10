@@ -1,22 +1,22 @@
-"""..."""
+"""Timeless - a datetime toolkit for people in a hurry."""
 
 # flake8: noqa
-
-from timeless.api import datetime
-from timeless.api import from_pandas
-from timeless.api import now
-from timeless.api import parse
-from timeless.api import period
-from timeless.api import to_pandas
-from timeless.api import today
+from timeless.converters import from_datetime
+from timeless.converters import from_pandas
+from timeless.converters import parse
+from timeless.converters import to_datetime
+from timeless.converters import to_pandas
+from timeless.datetime import Datetime as datetime
+from timeless.datetime import get_first_weekday_in_month
+from timeless.datetime import now
+from timeless.datetime import today
+from timeless.period import Period as period
 from timeless.utils import Weekdays as weekdays
-from timeless.datetime import Datetime
-from timeless.period import Period
 
 
 # module level doc-string
 __doc__ = """
-timeless - a datetime toolkit for people in a hurry.
+Timeless - a datetime toolkit for people in a hurry.
 =====================================================================
 
 **timeless** sits on sholders of giants to provide a simple and easy to use datetime
