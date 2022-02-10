@@ -21,14 +21,12 @@ class Datetime(_datetime, _date):
         year: int,
         month: int,
         day: int,
-        hour: int,
-        minute: int,
-        second: int,
-        microsecond: int,
+        hour: int = 0,
+        minute: int = 0,
+        second: int = 0,
+        microsecond: int = 0,
         zone: Union[ZoneInfo, str] = ZoneInfo("UTC"),
     ):
-        """..."""
-
         if isinstance(zone, str):
             zone = ZoneInfo(zone)
 
@@ -101,7 +99,15 @@ class Datetime(_datetime, _date):
         [type]
             [description]
         """
-        dt = self - relativedelta(years=years, months=months, days=days, hours=hours, minutes=minutes, seconds=seconds, microseconds=microseconds)
+        dt = self - relativedelta(
+            years=years,
+            months=months,
+            days=days,
+            hours=hours,
+            minutes=minutes,
+            seconds=seconds,
+            microseconds=microseconds,
+        )
         return self.__class__(
             year=dt.year,
             month=dt.month,
@@ -277,23 +283,3 @@ class Datetime(_datetime, _date):
                 return self.get_next(weekday)
             else:
                 return last_in_month
-
-    def to_datetime(self) -> _datetime:
-        """
-        Convert a timeless.Datetime to a datetime object.
-
-        Returns
-        -------
-        _datetime
-            [description]
-        """
-        return _datetime(
-            year=self.year,
-            month=self.month,
-            day=self.day,
-            hour=self.hour,
-            minute=self.minute,
-            second=self.second,
-            microsecond=self.microsecond,
-            tzinfo=self.tzinfo,
-        )

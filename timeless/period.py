@@ -1,13 +1,14 @@
 """Friendly time span utilities."""
+
 from typing import Union
 
-
-from timeless.datetime import Datetime
 from dateutil.relativedelta import relativedelta
-from datetime import timedelta
+from timeless.datetime import Datetime
 
 
 class Period(list):
+    """Timeless time span."""
+
     def __init__(
         self,
         start: Datetime,
@@ -15,6 +16,8 @@ class Period(list):
         freq: str = "days",
         step: int = 1,
     ):
+        list.__init__(self)
+
         self.start = start
         self.end = end
         self.freq = freq
@@ -23,15 +26,29 @@ class Period(list):
         if isinstance(end, int):
             end = start.add(**{freq: end})
 
-        list.__init__(self)
-
         self.append(start)
         while start < end:
             start = start.add(**{freq: step})
             self.append(start)
 
-    def append(self, item: Datetime):
+    def append(self, item: Datetime) -> None:
+        """
+        [summary]
 
+        [extended_summary]
+
+        Parameters
+        ----------
+        item : Datetime
+            [description]
+
+        Raises
+        ------
+        ValueError
+            [description]
+        TypeError
+            [description]
+        """
         if not isinstance(item, Datetime):
             raise ValueError("Only Datetime instances allowed")
 
@@ -42,8 +59,26 @@ class Period(list):
         self.start = min(self)
         self.end = max(self)
 
-    def insert(self, index: int, item: Datetime):
+    def insert(self, index: int, item: Datetime) -> None:
+        """
+        [summary]
 
+        [extended_summary]
+
+        Parameters
+        ----------
+        index : int
+            [description]
+        item : Datetime
+            [description]
+
+        Raises
+        ------
+        ValueError
+            [description]
+        TypeError
+            [description]
+        """
         if not isinstance(item, Datetime):
             raise ValueError("Only Datetime instances allowed")
 
