@@ -5,10 +5,23 @@ copyright: Copyright &copy; 2022 Eric Miguel
 
 theme:
   name: material
+  palette: 
+    - scheme: default
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/toggle-switch-off-outline 
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
   features:
-    - navigation.tracking
-    - navigation.tabs
-    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
     - content.code.annotate 
 
 repo_name: ericmiguel/timeless
@@ -25,10 +38,11 @@ nav:
 - Timeless: index.md
 - Datetime:
   - Datetime basics: datetime/basic.md
+  - Datetime conveniences: datetime/conveniences.md
 - Period:
   - Period basics: period/basic.md
 - Converters:
-  - Python's default datetime and Timeless: converters/default_datetime.md
+  - Default datetime and Timeless: converters/default_datetime.md
   - Pandas and Timeless: converters/pandas.md
 
 

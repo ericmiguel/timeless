@@ -1,5 +1,7 @@
 # Datetime basics
 
+Timeless dates and datetimes are represented by the `Datetime` type. It's the fundamental piece of the package.
+
 ```py linenums="1"
 import timeless
 

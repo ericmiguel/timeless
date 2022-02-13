@@ -9,11 +9,9 @@ This package is a work in progress and it was created as a study object.
 
 ## 🧠 Features
 
-- ✔️ very simple API
 - ✔️ minimal code to get things done
 - ✔️ easy use with other packages
-- ✔️ just one import
-- ✔️ few dependencies
+- ✔️ one import, one syntax
 
 ## 📦 Installation
 
@@ -29,23 +27,18 @@ I love Pendulum, although since last year (maybe 2 years) it doesn't seem to be 
 
 ## 💻 Sample usage
 
-Timeless use two main concepts: `Datetime` and `Period`. A datetime is a point in Time, and a Period is a duration.
+Timeless use two main concepts: `Datetime` and `Period`.
 
-Timeless doesn`t differentiate between datetime and date objects.
+- A datetime is a point in time
+- A Period is a time range.
 
-All datetimes are assumed to be in the UTC+00:00 timezone if any other timezone isn`t specified.
-
-```py linenums="1"
-import timeless
-
-start = timeless.datetime(1900, 1, 1, zone="UTC")
-end = start.add(years=1)
-
-end.subtract(months=1)
-
-start.set(year=2099, month=2, day=26, hour=5, zone="America/Sao_Paulo")
-
-start.is_past()  # True
-start.is_future()  # False
-start.set(year=2099).is_future()  # True
+```py linenums="1" title="introduction/sample_usage.py"
+--8<--
+docs_src/introduction/sample_usage.py
+--8<--
 ```
+
+Remarks:
+
+- Timeless doesn`t differentiate between datetime and date objects.
+- All datetimes are assumed to be in the UTC if any other timezone is specified.
