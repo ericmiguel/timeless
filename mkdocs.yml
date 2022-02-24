@@ -35,15 +35,17 @@ extra:
       link: https://github.com/ericmiguel
 
 nav:
-- Timeless: index.md
+- Introduction: index.md
 - Datetime:
   - Datetime basics: datetime/basic.md
+  - Datetime operations: datetime/operations.md
+  - Datetime parsing: datetime/parsing.md
   - Datetime conveniences: datetime/conveniences.md
 - Period:
   - Period basics: period/basic.md
 - Converters:
-  - Default datetime and Timeless: converters/default_datetime.md
-  - Pandas and Timeless: converters/pandas.md
+  - Default datetime: converters/default_datetime.md
+  - Pandas: converters/pandas.md
 
 
 markdown_extensions:

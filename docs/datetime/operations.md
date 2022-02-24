@@ -1,3 +1,3 @@
-# Periods basics
+# Datetime operations
 
 Under construction...
