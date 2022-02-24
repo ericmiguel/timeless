@@ -30,6 +30,7 @@ types-python-dateutil = "^0.1.4"
 mkdocs = "^1.2.3"
 mkdocs-material = "^8.1.10"
 autoflake = "^1.4"
+pytest-cov = "^3.0.0"
 
 [tool.isort]
 profile = "black"
