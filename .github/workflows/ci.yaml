@@ -1,10 +1,55 @@
-name: ci 
+name: Push
 on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
   push:
     branches:
       - main
+    paths-ignore:
+      - .gitignore
+      - .github/**
+      - .pre-commit-config.yaml
+      - README.md
+      - requirements.txt
+      - requirements.bash
+      - poetry.lock
+
 jobs:
-  deploy:
+  code-quality:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9]
+        poetry-version: [1.1.2]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Run black
+        run: poetry run black . --check
+      - name: Run isort
+        run: poetry run isort . --check-only
+      - name: Run flake8
+        run: poetry run flake8 .
+      - name: Run Pydocstyle
+        run: poetry run pydocstyle .
+      - name: Run Mypy
+        run: poetry run mypy .
+      - name: Run Pytest
+        run: python -m pytest .
+  update_docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

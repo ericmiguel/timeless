@@ -41,9 +41,3 @@ repos:
           language: system
           always_run: true
           pass_filenames: false
-        - id: gerar requirements
-          name: gerar requirements
-          entry: sh requirements.sh
-          language: system
-          always_run: true
-          pass_filenames: false
