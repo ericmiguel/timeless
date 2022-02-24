@@ -65,7 +65,7 @@ ignore = [  # alertas e erros por conta do black
 
 [tool.pydocstyle]
 convention = "numpy"
-add-ignore = "D401"
+add-ignore = "D100,D203"
 match = '(?!test_|tests).*\.py'
 match-dir = "[^\tests|.].*"
 
