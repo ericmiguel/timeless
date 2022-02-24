@@ -48,7 +48,7 @@ jobs:
       - name: Run Mypy
         run: poetry run mypy .
       - name: Run Pytest
-        run: python -m pytest .
+        run: poetry run pytest --cov=timeless tests/
   update_docs:
     runs-on: ubuntu-latest
     steps:
