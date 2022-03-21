@@ -133,7 +133,7 @@ class Period(list):
         microseconds: int = 0,
     ) -> "Period":
         """
-        Convenience method to sum or subtract a timedelta from the period.
+        Sum or subtract a timedelta from the period.
 
         Currently only supports relativedelta.
 
@@ -183,7 +183,7 @@ class Period(list):
         return abs(delta.total_seconds())
 
     def get_duration(self) -> float:
-        """Convenience method to duration property."""
+        """Equivalent function of duration property."""
         return self.duration
 
     def lt(self, other: "Period") -> bool:

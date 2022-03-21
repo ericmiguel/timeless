@@ -27,7 +27,7 @@ class Datetime(_datetime, _date):
         microsecond: int = 0,
         zone: Union[ZoneInfo, str] = ZoneInfo("UTC"),
     ):
-        """Controls the instance creation."""
+        """Control the instance creation."""
         if isinstance(zone, str):
             zone = ZoneInfo(zone)
 
@@ -274,7 +274,7 @@ class Datetime(_datetime, _date):
         return self.set(hour=0, minute=0, second=0, microsecond=0, zone=self.zone)
 
     def set_zero(self):
-        """Convenience method to zero property."""
+        """Equivalent function of zero property."""
         return self.zero
 
     def diff(self, other: "Datetime") -> relativedelta:
@@ -295,7 +295,7 @@ class Datetime(_datetime, _date):
 
     def get_next(self, weekday: str) -> "Datetime":
         """
-        Convenience method to get the next instance of a given weekday.
+        Get the next instance of a given weekday.
 
         Does't consider the current day.
 
@@ -320,7 +320,7 @@ class Datetime(_datetime, _date):
 
     def get_last(self, weekday: str) -> "Datetime":
         """
-        Convenience method to get the last instance of a given weekday.
+        Get the last instance of a given weekday.
 
         Returns
         -------
@@ -388,7 +388,7 @@ class Datetime(_datetime, _date):
     @property
     def days_in_month(self) -> int:
         """
-        Number of days in the month of the instance.
+        Get the number of days in the month.
 
         Returns
         -------
@@ -399,7 +399,7 @@ class Datetime(_datetime, _date):
 
     def get_days_in_month(self) -> int:
         """
-        Convenience method to days_in_month.
+        Equivalent function of days_in_month property.
 
         Returns
         -------

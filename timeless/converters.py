@@ -69,7 +69,7 @@ def from_datetime(
 
 def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Period]:
     """
-    Creates a Datetime instance from a pandas.Timestamp or a pandas.DateTimeIndex.
+    Create a Datetime instance from a pandas.Timestamp or a pandas.DateTimeIndex.
 
     Parameters
     ----------
@@ -148,7 +148,7 @@ def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Pe
 
 def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Timestamp]:
     """
-    Creates a pandas.Timestamp instance from a Datetime.
+    Create a pandas.Timestamp instance from a Datetime.
 
     Periods are converted to a list of pandas.Timestamp instances.
 

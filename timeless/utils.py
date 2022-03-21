@@ -8,7 +8,7 @@ from dateutil import relativedelta
 
 def parse_pandas_offset_freq(offset: str) -> Optional[str]:
     """
-    Maps pandas offset strings to timeless.Datetime strings.
+    Map pandas offset strings to timeless.Datetime strings.
 
     Parameters
     ----------
