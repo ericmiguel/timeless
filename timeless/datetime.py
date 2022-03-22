@@ -26,7 +26,7 @@ class Datetime(_datetime, _date):
         second: int = 0,
         microsecond: int = 0,
         zone: Union[ZoneInfo, str] = ZoneInfo("UTC"),
-    ):
+    ) -> "Datetime":
         """Control the instance creation."""
         if isinstance(zone, str):
             zone = ZoneInfo(zone)
@@ -269,11 +269,11 @@ class Datetime(_datetime, _date):
         return self.strftime(format)
 
     @property
-    def zero(self):
+    def zero(self) -> "Datetime":
         """Get rid of hour, minute, second, and microsecond information."""
         return self.set(hour=0, minute=0, second=0, microsecond=0, zone=self.zone)
 
-    def set_zero(self):
+    def set_zero(self) -> "Datetime":
         """Equivalent function of zero property."""
         return self.zero
 

@@ -170,7 +170,7 @@ def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Times
         return pd.Timestamp(dt)
 
 
-def parse(
+def parse(  # type: ignore
     string: str, zone: str = "UTC", fill: Optional[Datetime] = None, *args, **kwargs
 ) -> Datetime:
     """
