@@ -7,31 +7,31 @@ repos:
       hooks:
         - id: black
           name: black
-          entry: poetry run black .
+          entry: poetry run black timeless tests
           language: system
           always_run: true
           pass_filenames: false
         - id: isort
           name: isort
-          entry: poetry run isort .
+          entry: poetry run isort timeless tests
           language: system
           always_run: true
           pass_filenames: false
         - id: mypy
           name: mypy
-          entry: poetry run mypy .
+          entry: poetry run mypy timeless
           language: system
           always_run: true
           pass_filenames: false
         - id: flake8
           name: flake8
-          entry: poetry run flake8 .
+          entry: poetry run flake8 timeless
           language: system
           always_run: true
           pass_filenames: false
         - id: pydocstyle
           name: pydocstyle
-          entry: poetry run pydocstyle .
+          entry: poetry run pydocstyle timeless
           language: system
           always_run: true
           pass_filenames: false
