@@ -7,6 +7,7 @@ from typing import List
 from typing import Union
 from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
 
 from timeless import utils
@@ -166,3 +167,37 @@ def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Times
         return [pd.Timestamp(d) for d in dt]
     else:
         return pd.Timestamp(dt)
+
+
+def to_np_datetime64(dt: Datetime) -> np.datetime64:
+    """
+    Convert a Datetime instance to a Numpy datetime64 instance.
+
+    Parameters
+    ----------
+    datetime : Datetime
+        Datetime or Period instance.
+
+    Returns
+    -------
+    np.datetime64
+        Numpy time instances.
+    """
+    return np.datetime64(dt)
+
+
+def from_np_datetime64(dt: np.datetime64) -> Datetime:
+    """
+    Convert a Numpy datetime64 instance to a Timeless Datetime instance.
+
+    Parameters
+    ----------
+    datetime : np.datetime64
+        Datetime or Period instance.
+
+    Returns
+    -------
+    Datetime
+        Numpy time instances.
+    """
+    return from_datetime(dt.astype(Datetime))
