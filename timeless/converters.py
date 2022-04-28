@@ -4,13 +4,11 @@ import warnings
 
 from datetime import datetime as _datetime
 from typing import List
-from typing import Optional
 from typing import Union
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from dateutil import parser
 from timeless import utils
 from timeless.datetime import Datetime
 from timeless.period import Period
@@ -168,66 +166,3 @@ def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Times
         return [pd.Timestamp(d) for d in dt]
     else:
         return pd.Timestamp(dt)
-
-
-def parse(
-    string: str,
-    format: Optional[str] = None,
-    zone: Optional[str] = None,
-    day_first: bool = False,
-    year_first: bool = False,
-) -> Datetime:
-    """
-    Parse a string into a Datetime.
-
-    If no format is provided, the string is parsed using Dateutil's parser. Otherwise,
-    the string is parsed using strptime. In the latter case dateutil's parser arguments
-    (nominally day_first, year_first) are ignored.
-
-    The "ignoretz" parameter is not supported, since "zone" can override the timezone
-    value and Timeless does not accept naive datetimes.
-
-    See https://dateutil.readthedocs.io/en/stable/parser.html for more information on
-    dautil's parser arguments.
-
-    Parameters
-    ----------
-    string : str
-        datetime string to parse.
-    format : Optional[str]
-        dateutil format string, by default None.
-    zone : Optional[str]
-        timezone name (overrides parsed value), by default None.
-    day_first : bool, optional
-        Whether to interpret the first value in an ambiguous 3-integer date as the day,
-        by default False
-    year_first : bool, optional
-        Whether to interpret the first value in an ambiguous 3-integer date as the year,
-        by default False.
-
-    Returns
-    -------
-    Datetime
-        Parsed datetime.
-    """
-    if format:
-        parsed = _datetime.strptime(string, format)
-    else:
-        parser_info = parser.parserinfo(dayfirst=day_first, yearfirst=year_first)
-        parsed = parser.parse(string, parser_info)
-
-    if not zone:
-        zone = parsed.tzname()
-        if not zone:
-            zone = "UTC"
-
-    return Datetime(
-        parsed.year,
-        parsed.month,
-        parsed.day,
-        parsed.hour,
-        parsed.minute,
-        parsed.second,
-        parsed.microsecond,
-        zone,
-    )
