@@ -1,7 +1,10 @@
 """Friendly interface for time span manipulations."""
 
+from typing import Union
+
 from dateutil.relativedelta import relativedelta
 from timeless.datetime import Datetime
+from timeless.datetime import parse
 
 
 class Period(list):
@@ -9,12 +12,22 @@ class Period(list):
 
     def __init__(
         self,
-        start: Datetime,
-        end: Datetime,
+        start: Union[str, Datetime],
+        end: Union[str, Datetime],
         freq: str = "days",
         step: int = 1,
+        parse_kwargs: dict = dict(),
     ):
         list.__init__(self)
+
+        if isinstance(start, str):
+            start = parse(start, **parse_kwargs)
+
+        if isinstance(end, str):
+            end = parse(end, **parse_kwargs)
+
+        if end < start:
+            raise ValueError("End date must be greater than start date")
 
         self.start = start
         self.end = end
