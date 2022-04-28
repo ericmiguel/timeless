@@ -3,7 +3,6 @@
 import warnings
 
 from datetime import datetime as _datetime
-from typing import List
 from typing import Union
 from zoneinfo import ZoneInfo
 
@@ -66,107 +65,105 @@ def from_datetime(
     )
 
 
-def from_pandas(dt: Union[pd.DatetimeIndex, pd.Timestamp]) -> Union[Datetime, Period]:
+def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
+    """Pandas DatetimeIndex to Period."""
+    freq = None
+
+    if dt.freq:
+        freq = utils.parse_pandas_offset_freq(dt.freq.name)
+
+    if freq is None:
+        warnings.warn("No frequency found in DatetimeIndex: assuming 'days'.")
+        freq = "days"
+
+    _start = dt.min().to_pydatetime()
+    _end = dt.max().to_pydatetime()
+
+    try:
+        _ = _start.tzinfo.zone
+    except AttributeError:
+        _start = _start.astimezone(ZoneInfo("UTC"))
+        _end = _end.astimezone(ZoneInfo("UTC"))
+
+    start = Datetime(
+        _start.year,
+        _start.month,
+        _start.day,
+        _start.hour,
+        _start.minute,
+        _start.second,
+        _start.microsecond,
+        _start.tzinfo.key,
+    )
+    end = Datetime(
+        _end.year,
+        _end.month,
+        _end.day,
+        _end.hour,
+        _end.minute,
+        _end.second,
+        _end.microsecond,
+        _end.tzinfo.key,
+    )
+
+    return Period(start, end, freq)
+
+
+def from_pd_timestamp(
+    dt: pd.Timestamp, zone: str = "UTC", enforce_zone: bool = False
+) -> Datetime:
     """
-    Create a Datetime instance from a pandas.Timestamp or a pandas.DateTimeIndex.
+    Pandas Timestamp to Datetime.
 
     Parameters
     ----------
-    dt : Union[pd.DatetimeIndex, pd.Timestamp]
-        Pandas instance.
+    dt : pd.Timestamp
+        Pandas Timestamp.
+    zone : str, optional
+        Timezone name in case of any is found, by default "UTC"
+    enforce_zone : bool, optional
+        Force timezone conversion to 'zone' value, by default False
 
     Returns
     -------
-    Union[Datetime, Period]
-        Datetime or Period (time span) instance.
+    Datetime
+        Timeless Datetime
     """
-    if isinstance(dt, pd.DatetimeIndex):
-        freq = None
+    if not hasattr(dt.tz, "zone"):
+        dt = dt.tz_localize(zone)
 
-        if dt.freq:
-            freq = utils.parse_pandas_offset_freq(dt.freq.name)
-        else:
-            pass
-            # raise ValueError("No frequency found in DatetimeIndex")
+    if enforce_zone:
+        dt = dt.tz_convert(zone)
 
-        _start = dt.min().to_pydatetime()
-        _end = dt.max().to_pydatetime()
+    datetime_obj = dt.to_pydatetime()
 
-        try:
-            _ = _start.tzinfo.zone
-        except AttributeError:
-            _start = _start.astimezone(ZoneInfo("UTC"))
-            _end = _end.astimezone(ZoneInfo("UTC"))
-
-        start = Datetime(
-            _start.year,
-            _start.month,
-            _start.day,
-            _start.hour,
-            _start.minute,
-            _start.second,
-            _start.microsecond,
-            _start.tzinfo.key,
-        )
-        end = Datetime(
-            _end.year,
-            _end.month,
-            _end.day,
-            _end.hour,
-            _end.minute,
-            _end.second,
-            _end.microsecond,
-            _end.tzinfo.key,
-        )
-
-        if freq is None:
-            warnings.warn("No frequency found in DatetimeIndex: assuming 'days'.")
-            freq = "days"
-
-        return Period(start, end, freq)
-
-    else:
-        datetime_obj = dt.to_pydatetime()
-
-        try:
-            _ = datetime_obj.tzinfo.zone
-        except AttributeError:
-            datetime_obj = datetime_obj.astimezone(ZoneInfo("UTC"))
-
-        return Datetime(
-            datetime_obj.year,
-            datetime_obj.month,
-            datetime_obj.day,
-            datetime_obj.hour,
-            datetime_obj.minute,
-            datetime_obj.second,
-            datetime_obj.microsecond,
-            datetime_obj.tzinfo.key,
-        )
+    return Datetime(
+        datetime_obj.year,
+        datetime_obj.month,
+        datetime_obj.day,
+        datetime_obj.hour,
+        datetime_obj.minute,
+        datetime_obj.second,
+        datetime_obj.microsecond,
+        str(datetime_obj.tzinfo),
+    )
 
 
-def to_pandas(dt: Union[Period, Datetime]) -> Union[List[pd.Timestamp], pd.Timestamp]:
+def to_pd_timestamp(dt: Datetime) -> pd.Timestamp:
     """
     Create a pandas.Timestamp instance from a Datetime.
 
-    Periods are converted to a list of pandas.Timestamp instances.
-
-    Lists of Timestamps are automatically coerced DatetimeIndex by Pandas.
-
     Parameters
     ----------
-    dt : Union[Period, Datetime]
-        Timeless Datetime or Period instance.
+    dt : Datetime
+        Timeless Datetime.
 
     Returns
     -------
-    Union[List[pd.Timestamp], pd.Timestamp]
-        Pandas time instances.
+    pd.Timestamp
+        Pandas Timestamp.
     """
-    if isinstance(dt, Period):
-        return [pd.Timestamp(d) for d in dt]
-    else:
-        return pd.Timestamp(dt)
+    return pd.Timestamp(dt)
 
 
 def to_np_datetime64(dt: Datetime) -> np.datetime64:

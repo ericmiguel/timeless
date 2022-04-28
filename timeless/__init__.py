@@ -3,10 +3,10 @@
 # flake8: noqa
 from timeless.converters import from_datetime
 from timeless.converters import from_np_datetime64
-from timeless.converters import from_pandas
+from timeless.converters import from_pd_datetimeindex
+from timeless.converters import from_pd_timestamp
 from timeless.converters import to_datetime
 from timeless.converters import to_np_datetime64
-from timeless.converters import to_pandas
 from timeless.datetime import Datetime as datetime
 from timeless.datetime import get_first_weekday_in_month
 from timeless.datetime import now
