@@ -7,7 +7,12 @@ from datetime import datetime as _datetime
 from typing import Iterator
 from typing import Optional
 from typing import Union
-from zoneinfo import ZoneInfo
+
+
+try:  # Python <3.9
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports import zoneinfo as ZoneInfo  # type: ignore
 
 from dateutil import parser
 from dateutil.relativedelta import relativedelta

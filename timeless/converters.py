@@ -4,7 +4,12 @@ import warnings
 
 from datetime import datetime as _datetime
 from typing import Union
-from zoneinfo import ZoneInfo
+
+
+try:  # Python <3.9
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports import zoneinfo as ZoneInfo  # type: ignore
 
 import numpy as np
 import pandas as pd
@@ -36,7 +41,7 @@ def to_datetime(datetime: _datetime) -> _datetime:
 
 
 def from_datetime(
-    datetime: _datetime, zone: Union[ZoneInfo, str] = ZoneInfo("UTC")
+    dt: _datetime, zone: Union[ZoneInfo, str] = ZoneInfo("UTC")
 ) -> Datetime:
     """
     Convert a datetime object to a timeless.Datetime.
@@ -54,13 +59,13 @@ def from_datetime(
         Timeless datetime
     """
     return Datetime(
-        year=datetime.year,
-        month=datetime.month,
-        day=datetime.day,
-        hour=datetime.hour,
-        minute=datetime.minute,
-        second=datetime.second,
-        microsecond=datetime.microsecond,
+        year=dt.year,
+        month=dt.month,
+        day=dt.day,
+        hour=dt.hour,
+        minute=dt.minute,
+        second=dt.second,
+        microsecond=dt.microsecond,
         zone=zone,
     )
 
@@ -190,11 +195,15 @@ def from_np_datetime64(dt: np.datetime64) -> Datetime:
     Parameters
     ----------
     datetime : np.datetime64
-        Datetime or Period instance.
+        Numpy Datetime64 instance.
 
     Returns
     -------
     Datetime
-        Numpy time instances.
+        Timeless Datetime instance.
     """
-    return from_datetime(dt.astype(Datetime))
+    unix_epoch = np.datetime64(0, "s")
+    one_second = np.timedelta64(1, "s")
+    seconds_since_epoch = float((dt - unix_epoch) / one_second)
+    dt_datetime = _datetime.utcfromtimestamp(seconds_since_epoch)
+    return from_datetime(dt_datetime)
