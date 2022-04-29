@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "timeless"
-version = "0.1.8"
+version = "0.2.0"
 description = "Datetime for people in a hurry."
 authors = ["ericmiguel <ericmiguel@id.uff.br>"]
 keywords = ["datetime", "datetime for humans"]
@@ -28,6 +28,7 @@ python = "^3.9"
 pandas = "^1.3.4"
 python-dateutil = "^2.8.2"
 "backports.zoneinfo" = { version = "^0.2.1", python = "<3.9" }
+tzdata = { version = "^2022.1", markers = "sys_platform == 'win32'" }
 
 [tool.poetry.dev-dependencies]
 isort = "^5.8.0"
