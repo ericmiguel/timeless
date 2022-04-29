@@ -27,6 +27,7 @@ ignore_missing_imports = true
 python = "^3.9"
 pandas = "^1.3.4"
 python-dateutil = "^2.8.2"
+"backports.zoneinfo" = { version = "^0.2.1", python = "<3.9" }
 
 [tool.poetry.dev-dependencies]
 isort = "^5.8.0"
