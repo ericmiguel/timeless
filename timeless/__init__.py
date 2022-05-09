@@ -1,6 +1,5 @@
 """Timeless - a datetime toolkit for people in a hurry."""
 
-# flake8: noqa
 from timeless.converters import from_datetime
 from timeless.converters import from_np_datetime64
 from timeless.converters import from_pd_datetimeindex
@@ -25,3 +24,19 @@ toolkit. Simple date ranges, datetime operations and just one import.
 
 This package is a work in progress and it was created as a study object.
 """
+
+__all__ = [
+    "from_datetime",
+    "from_np_datetime64",
+    "from_pd_datetimeindex",
+    "from_pd_timestamp",
+    "to_datetime",
+    "to_np_datetime64",
+    "datetime",
+    "period",
+    "get_first_weekday_in_month",
+    "now",
+    "today",
+    "parse",
+    "weekdays",
+]
