@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "timeless"
-version = "0.2.2"
+version = "0.2.3"
 description = "Datetime for people in a hurry."
 authors = ["ericmiguel <ericmiguel@id.uff.br>"]
 keywords = ["datetime", "datetime for humans"]
@@ -79,8 +79,9 @@ ignore = [  # alertas e erros por conta do black
 [tool.pydocstyle]
 convention = "numpy"
 add-ignore = "D100,D203"
-match = '(?!test_|tests).*\.py'
-match-dir = "[^\tests|.].*"
+match = '(?!tests).*\.py'
+
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
