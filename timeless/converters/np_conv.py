@@ -2,10 +2,9 @@
 
 from datetime import datetime as _datetime
 
-from timeless.converters.dt_conv import from_datetime
-
 import numpy as np  # type: ignore
 
+from timeless.converters.dt_conv import from_datetime
 from timeless.datetime import Datetime
 
 

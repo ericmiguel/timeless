@@ -7,7 +7,7 @@ from datetime import date as _date
 from datetime import datetime as _datetime
 from typing import Iterator
 from typing import Optional
-from typing import Union
+
 
 try:  # Python <3.9
     from zoneinfo import ZoneInfo  # type: ignore

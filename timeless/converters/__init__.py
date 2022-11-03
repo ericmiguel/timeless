@@ -2,9 +2,9 @@
 
 try:
     from timeless.converters.np_conv import from_np_datetime64
+    from timeless.converters.np_conv import to_np_datetime64
     from timeless.converters.pd_conv import from_pd_datetimeindex
     from timeless.converters.pd_conv import from_pd_timestamp
-    from timeless.converters.np_conv import to_np_datetime64
 except ImportError:
     raise ImportError("Run 'pip install timeless --extras converters'")
 
