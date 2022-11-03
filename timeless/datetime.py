@@ -2,24 +2,36 @@
 
 import calendar
 
+from dataclasses import dataclass
 from datetime import date as _date
 from datetime import datetime as _datetime
 from typing import Iterator
 from typing import Optional
 from typing import Union
 
-
 try:  # Python <3.9
-    from zoneinfo import ZoneInfo
+    from zoneinfo import ZoneInfo  # type: ignore
 except ImportError:
-    from backports import zoneinfo as ZoneInfo  # type: ignore
+    from backports.zoneinfo import ZoneInfo  # type: ignore
 
 from dateutil import parser
-from dateutil.relativedelta import relativedelta
-from timeless import utils
+from dateutil import relativedelta
 
 
-class Datetime(_datetime, _date):
+@dataclass
+class Weekdays:
+    """Weekdays mapping for easy acess."""
+
+    monday = relativedelta.MO
+    tuesday = relativedelta.TU
+    wednesday = relativedelta.WE
+    thursday = relativedelta.TH
+    friday = relativedelta.FR
+    saturday = relativedelta.SA
+    sunday = relativedelta.SU
+
+
+class Datetime(_datetime):
     """Timeless datetime."""
 
     def __new__(
@@ -31,11 +43,9 @@ class Datetime(_datetime, _date):
         minute: int = 0,
         second: int = 0,
         microsecond: int = 0,
-        zone: Union[ZoneInfo, str] = ZoneInfo("UTC"),
+        zone: str = "UTC",
     ) -> "Datetime":
         """Control the instance creation."""
-        if isinstance(zone, str):
-            zone = ZoneInfo(zone)
 
         self = _datetime.__new__(
             cls,
@@ -46,9 +56,11 @@ class Datetime(_datetime, _date):
             minute=minute,
             second=second,
             microsecond=microsecond,
-            tzinfo=zone,
+            tzinfo=ZoneInfo(zone)
         )
+
         return self
+
 
     def add(
         self,
@@ -68,7 +80,7 @@ class Datetime(_datetime, _date):
         Datetime
             New datetime instance with added value.
         """
-        dt = self + relativedelta(
+        dt = self + relativedelta.relativedelta(
             years=years,
             months=months,
             days=days,
@@ -78,16 +90,7 @@ class Datetime(_datetime, _date):
             microseconds=microseconds,
         )
 
-        return self.__class__(
-            year=dt.year,
-            month=dt.month,
-            day=dt.day,
-            hour=dt.hour,
-            minute=dt.minute,
-            second=dt.second,
-            microsecond=dt.microsecond,
-            zone=self.zone,
-        )
+        return dt
 
     def subtract(
         self,
@@ -107,7 +110,7 @@ class Datetime(_datetime, _date):
         Datetime
             New datetime instance with the subtracted value.
         """
-        dt = self - relativedelta(
+        dt = self - relativedelta.relativedelta(
             years=years,
             months=months,
             days=days,
@@ -116,16 +119,8 @@ class Datetime(_datetime, _date):
             seconds=seconds,
             microseconds=microseconds,
         )
-        return self.__class__(
-            year=dt.year,
-            month=dt.month,
-            day=dt.day,
-            hour=dt.hour,
-            minute=dt.minute,
-            second=dt.second,
-            microsecond=dt.microsecond,
-            zone=self.zone,
-        )
+
+        return dt
 
     def __iter__(self) -> Iterator[int]:
         """
@@ -157,7 +152,7 @@ class Datetime(_datetime, _date):
         minute: Optional[int] = None,
         second: Optional[int] = None,
         microsecond: Optional[int] = None,
-        zone: Optional[Union[str, ZoneInfo]] = "UTC",
+        zone: Optional[str] = "UTC",
     ) -> "Datetime":
         """
         Override the instance values.
@@ -179,7 +174,7 @@ class Datetime(_datetime, _date):
         microsecond : Optional[int], optional
             new microsecond value, by default None
         zone : Optional[Union[str, ZoneInfo]], optional
-            new timezone value, by default "UTC"
+            new timezone value
 
         Returns
         -------
@@ -205,24 +200,17 @@ class Datetime(_datetime, _date):
             # we can safely assume that timezone is always set
             zone = str(self.tzinfo)
 
-        return self.__class__(
+        return self.__new__(
+            self.__class__,
             year, month, day, hour, minute, second, microsecond, zone=zone
         )
 
+    def utc(self) -> "Datetime":
+        """Set datetime as UTC without apply the timezone offset."""
+        return self.set(zone="UTC")
+
     @property
     def zone(self) -> str:
-        """
-        Get the timezone name.
-
-        Returns
-        -------
-        str
-            Timezone name.
-        """
-        return str(self.tzinfo)
-
-    @property
-    def zone_info(self) -> ZoneInfo:
         """
         Get the timezone object.
 
@@ -231,7 +219,7 @@ class Datetime(_datetime, _date):
         ZoneInfo
             Timezone object.
         """
-        return ZoneInfo(self.zone)
+        return str(self.tzinfo)
 
     def is_future(self) -> bool:
         """
@@ -283,7 +271,7 @@ class Datetime(_datetime, _date):
         """Equivalent function of zero property."""
         return self.zero
 
-    def diff(self, other: "Datetime") -> relativedelta:
+    def diff(self, other: "Datetime") -> relativedelta.relativedelta:
         """
         Get the difference between the instance and another.
 
@@ -297,7 +285,7 @@ class Datetime(_datetime, _date):
         relativedelta
             Delta between the two instances.
         """
-        return relativedelta(self, other)
+        return relativedelta.relativedelta(self, other)
 
     def get_next(self, weekday: str) -> "Datetime":
         """
@@ -310,8 +298,8 @@ class Datetime(_datetime, _date):
         Datetime
             Next closest given weekday.
         """
-        weekday_ = utils.Weekdays.__dict__[weekday]
-        next_weekday = self + relativedelta(days=1, weekday=weekday_)
+        weekday_ = Weekdays.__dict__[weekday]
+        next_weekday = self + relativedelta.relativedelta(days=1, weekday=weekday_)
 
         return self.__class__(
             next_weekday.year,
@@ -333,8 +321,8 @@ class Datetime(_datetime, _date):
         Datetime
             Last closest given weekday.
         """
-        weekday_ = utils.Weekdays.__dict__[weekday](-1)
-        next_weekday = self + relativedelta(days=-1, weekday=weekday_)
+        weekday_ = Weekdays.__dict__[weekday](-1)
+        next_weekday = self + relativedelta.relativedelta(days=-1, weekday=weekday_)
 
         return self.__class__(
             next_weekday.year,
@@ -362,7 +350,7 @@ class Datetime(_datetime, _date):
             [description]
         """
         if week_start:
-            calendar.setfirstweekday(utils.Weekdays.__dict__[week_start])
+            calendar.setfirstweekday(Weekdays.__dict__[week_start])
 
         numeric_weekday = self.weekday()
         weekday_name = calendar.day_name[numeric_weekday]
@@ -415,7 +403,7 @@ class Datetime(_datetime, _date):
         return self.days_in_month
 
 
-def now(zone: str = "UTC") -> Datetime:
+def now(zone: str = "UTC", microseconds: bool = False) -> Datetime:
     """
     Get a DateTime instance for the current date and time.
 
@@ -430,6 +418,12 @@ def now(zone: str = "UTC") -> Datetime:
         Current date and time.
     """
     dt_ = _datetime.now(tz=ZoneInfo(zone))
+    
+    if microseconds:
+        ms = dt_.microsecond
+    else:
+        ms = 0
+
     dt = Datetime(
         dt_.year,
         dt_.month,
@@ -437,7 +431,7 @@ def now(zone: str = "UTC") -> Datetime:
         dt_.hour,
         dt_.minute,
         dt_.second,
-        dt_.microsecond,
+        ms,
         zone,
     )
 
