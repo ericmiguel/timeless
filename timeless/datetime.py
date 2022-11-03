@@ -56,11 +56,10 @@ class Datetime(_datetime):
             minute=minute,
             second=second,
             microsecond=microsecond,
-            tzinfo=ZoneInfo(zone)
+            tzinfo=ZoneInfo(zone),
         )
 
         return self
-
 
     def add(
         self,
@@ -202,7 +201,14 @@ class Datetime(_datetime):
 
         return self.__new__(
             self.__class__,
-            year, month, day, hour, minute, second, microsecond, zone=zone
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second,
+            microsecond,
+            zone=zone,
         )
 
     def utc(self) -> "Datetime":
@@ -418,7 +424,7 @@ def now(zone: str = "UTC", microseconds: bool = False) -> Datetime:
         Current date and time.
     """
     dt_ = _datetime.now(tz=ZoneInfo(zone))
-    
+
     if microseconds:
         ms = dt_.microsecond
     else:
