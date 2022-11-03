@@ -35,7 +35,7 @@ def to_datetime(datetime: _datetime) -> _datetime:
 
 
 def from_datetime(
-    dt: _datetime, zone: Union[ZoneInfo, str] = ZoneInfo("UTC")
+    dt: _datetime, zone: str = "UTC"
 ) -> Datetime:
     """
     Convert a datetime object to a timeless.Datetime.
