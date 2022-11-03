@@ -1,73 +1,84 @@
-"""Type converters for ease integrations."""
+"""Type converters for Pandas integrations."""
 
 import warnings
 
-from datetime import datetime as _datetime
-from typing import Union
-
 
 try:  # Python <3.9
-    from zoneinfo import ZoneInfo
+    from zoneinfo import ZoneInfo  # type: ignore
 except ImportError:
-    from backports import zoneinfo as ZoneInfo  # type: ignore
+    from backports.zoneinfo import ZoneInfo  # type: ignore
 
-import numpy as np
-import pandas as pd
+try:
+    import pandas as pd  # type: ignore
+except ImportError:
+    raise ImportError("Run 'pip install timeless --extras converters'")
 
-from timeless import utils
+from typing import Optional
+
 from timeless.datetime import Datetime
 from timeless.period import Period
 
 
-def to_datetime(datetime: _datetime) -> _datetime:
+def parse_pandas_offset_freq(offset: str) -> Optional[str]:
     """
-    Convert a timeless.Datetime to a datetime object.
-
-    Returns
-    -------
-    _datetime
-        Python's default datetime object.
-    """
-    return _datetime(
-        year=datetime.year,
-        month=datetime.month,
-        day=datetime.day,
-        hour=datetime.hour,
-        minute=datetime.minute,
-        second=datetime.second,
-        microsecond=datetime.microsecond,
-        tzinfo=datetime.tzinfo,
-    )
-
-
-def from_datetime(
-    dt: _datetime, zone: Union[ZoneInfo, str] = ZoneInfo("UTC")
-) -> Datetime:
-    """
-    Convert a datetime object to a timeless.Datetime.
+    Map pandas offset strings to timeless.Datetime strings.
 
     Parameters
     ----------
-    datetime : _datetime
-        Python's default datetime object.
-    zone : Union[ZoneInfo, str], optional
-        Timezone, by default ZoneInfo("UTC")
+    offset : str
+        Pandas offset string.
 
     Returns
     -------
-    Datetime
-        Timeless datetime
+    Optional[str]
+        Timeless offset string.
+
+    Raises
+    ------
+    ValueError
+        Invalid or unknown offset string.
     """
-    return Datetime(
-        year=dt.year,
-        month=dt.month,
-        day=dt.day,
-        hour=dt.hour,
-        minute=dt.minute,
-        second=dt.second,
-        microsecond=dt.microsecond,
-        zone=zone,
-    )
+    offsets = {
+        "B": None,
+        "C": None,
+        "D": "days",
+        "W": "weeks",
+        "M": "months",
+        "SM": None,
+        "BM": None,
+        "CBM": None,
+        "MS": "months",
+        "SMS": None,
+        "BMS": None,
+        "CBMS": None,
+        "Q": None,
+        "BQ": None,
+        "QS": None,
+        "BQS": None,
+        "A": "years",
+        "Y": "years",
+        "BA": None,
+        "BY": None,
+        "AS": "years",
+        "YS": "years",
+        "BAS": None,
+        "BYS": None,
+        "BH": None,
+        "H": "hours",
+        "T": "minutes",
+        "min": "minutes",
+        "S": "seconds",
+        "L": None,
+        "ms": None,
+        "U": "microseconds",
+        "US": "microseconds",
+        "N": None,
+    }
+
+    if offset not in offsets or offsets[offset] is None:
+        raise ValueError(f"Unknown offset: {offset}")
+
+    return offsets[offset]
 
 
 def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
@@ -75,7 +86,7 @@ def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
     freq = None
 
     if dt.freq:
-        freq = utils.parse_pandas_offset_freq(dt.freq.name)
+        freq = parse_pandas_offset_freq(dt.freq.name)
 
     if freq is None:
         warnings.warn("No frequency found in DatetimeIndex: assuming 'days'.")
@@ -169,41 +180,3 @@ def to_pd_timestamp(dt: Datetime) -> pd.Timestamp:
         Pandas Timestamp.
     """
     return pd.Timestamp(dt)
-
-
-def to_np_datetime64(dt: Datetime) -> np.datetime64:
-    """
-    Convert a Datetime instance to a Numpy datetime64 instance.
-
-    Parameters
-    ----------
-    datetime : Datetime
-        Datetime or Period instance.
-
-    Returns
-    -------
-    np.datetime64
-        Numpy time instances.
-    """
-    return np.datetime64(dt)
-
-
-def from_np_datetime64(dt: np.datetime64) -> Datetime:
-    """
-    Convert a Numpy datetime64 instance to a Timeless Datetime instance.
-
-    Parameters
-    ----------
-    datetime : np.datetime64
-        Numpy Datetime64 instance.
-
-    Returns
-    -------
-    Datetime
-        Timeless Datetime instance.
-    """
-    unix_epoch = np.datetime64(0, "s")
-    one_second = np.timedelta64(1, "s")
-    seconds_since_epoch = float((dt - unix_epoch) / one_second)
-    dt_datetime = _datetime.utcfromtimestamp(seconds_since_epoch)
-    return from_datetime(dt_datetime)
