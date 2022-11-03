@@ -88,7 +88,16 @@ class Datetime(_datetime):
             microseconds=microseconds,
         )
 
-        return dt
+        return self.__class__(
+            dt.year,
+            dt.month,
+            dt.day,
+            dt.hour,
+            dt.minute,
+            dt.second,
+            dt.microsecond,
+            zone=self.zone,
+        )
 
     def subtract(
         self,
@@ -118,7 +127,16 @@ class Datetime(_datetime):
             microseconds=microseconds,
         )
 
-        return dt
+        return self.__class__(
+            dt.year,
+            dt.month,
+            dt.day,
+            dt.hour,
+            dt.minute,
+            dt.second,
+            dt.microsecond,
+            zone=self.zone,
+        )
 
     def __iter__(self) -> Iterator[int]:
         """
