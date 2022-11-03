@@ -1,14 +1,6 @@
 """Type converters for native Datetime integrations."""
 
 from datetime import datetime as _datetime
-from typing import Union
-
-
-try:  # Python <3.9
-    from zoneinfo import ZoneInfo  # type: ignore
-except ImportError:
-    from backports.zoneinfo import ZoneInfo  # type: ignore
-
 
 from timeless.datetime import Datetime
 
