@@ -46,7 +46,6 @@ class Datetime(_datetime):
         zone: str = "UTC",
     ) -> "Datetime":
         """Control the instance creation."""
-
         self = _datetime.__new__(
             cls,
             year=year,
