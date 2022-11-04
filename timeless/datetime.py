@@ -286,7 +286,7 @@ class Datetime(_datetime):
         return self.strftime(format)
 
     def set_zero(self) -> "Datetime":
-        """Get rid of hour, minute, second, and microsecond information."""
+        """Get rid of hour, minute, second, microsecond and timezone information."""
         return self.set(hour=0, minute=0, second=0, microsecond=0, zone="UTC")
 
     def diff(self, other: "Datetime") -> relativedelta.relativedelta:
