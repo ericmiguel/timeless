@@ -285,14 +285,9 @@ class Datetime(_datetime):
 
         return self.strftime(format)
 
-    @property
-    def zero(self) -> "Datetime":
-        """Get rid of hour, minute, second, and microsecond information."""
-        return self.set(hour=0, minute=0, second=0, microsecond=0, zone=self.zone)
-
     def set_zero(self) -> "Datetime":
-        """Equivalent function of zero property."""
-        return self.zero
+        """Get rid of hour, minute, second, and microsecond information."""
+        return self.set(hour=0, minute=0, second=0, microsecond=0, zone="UTC")
 
     def diff(self, other: "Datetime") -> relativedelta.relativedelta:
         """
