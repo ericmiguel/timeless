@@ -810,7 +810,7 @@ converters = ["pandas"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "447074e6be6b80d1e9d235db429a0768a83fb2684bfa430c44389d3a8a1dd572"
+content-hash = "ac982dd0b5c2aefdc6101d241b23e4d8daa9ceaf8c7757cf16a9c6659e84220e"
 
 [metadata.files]
 attrs = [
