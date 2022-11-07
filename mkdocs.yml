@@ -51,6 +51,9 @@ nav:
   - Pandas: converters/pandas.md
   - Numpy: converters/numpy.md
   - Reference: converters/reference.md
+- Helpers:
+  - Basics: helpers/basic.md
+  - Reference: helpers/reference.md
 
 
 markdown_extensions:
