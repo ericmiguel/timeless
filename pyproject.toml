@@ -23,11 +23,10 @@ ignore_missing_imports = true
 [tool.poetry.dependencies]
 python = "^3.8"
 python-dateutil = "^2.8.2"
-"backports.zoneinfo" = { version = "^0.2.1", python = "<=3.8" }
 tzdata = { version = "^2022.6", markers = "sys_platform == 'win32'" }
 pandas = { version = "^1.5.1", optional = true }
 typing-extensions = "^4.4.0"
-backports-zoneinfo = "^0.2.1"
+backports-zoneinfo = { version = "^0.2.1", python = "<3.9" }
 
 [tool.poetry.extras]
 converters = ["pandas"]
