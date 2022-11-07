@@ -100,12 +100,20 @@ class Period(list):
         """
         Sum a given timedelta to the period.
 
-        Currently only supports relativedelta.
+        Parameters
+        ----------
+        other : relativedelta
+            _description_
 
         Returns
         -------
         Period
             New period with the given timedelta added.
+
+        Raises
+        ------
+        NotImplementedError
+            Currently only supports relativedelta.
         """
         if isinstance(other, relativedelta):
             delta = {
@@ -121,7 +129,7 @@ class Period(list):
             end = self.end.add(**delta)
             return self.__class__(start, end, self.freq, self.step)
 
-        return NotImplemented
+        raise NotImplementedError
 
     def subtract(self, other: relativedelta) -> "Period":
         """
