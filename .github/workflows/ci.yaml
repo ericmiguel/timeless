@@ -46,7 +46,7 @@ jobs:
       - name: Run Pydocstyle
         run: poetry run pydocstyle timeless
       - name: Run Mypy
-        run: poetry run mypy timeless
+        run: poetry run mypy timeless -enable-incomplete-features
   update_docs:
     runs-on: ubuntu-latest
     steps:
