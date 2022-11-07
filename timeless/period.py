@@ -266,10 +266,10 @@ def get_week(
 
     Parameters
     ----------
+    day : Datetime
+        Reference Datetime.
     week_first_day : str, optional
         Start day of the week, by default "monday"
-    zone : str, optional
-        Timezone, by default "UTC"
 
     Returns
     -------
@@ -326,8 +326,8 @@ def get_month(day: Datetime, **period_kwargs: Unpack[Periodkwargs]) -> Period:
 
     Parameters
     ----------
-    zone : str, optional
-        Timezone, by default "UTC"
+    day : Datetime
+        Reference Datetime.
 
     Returns
     -------

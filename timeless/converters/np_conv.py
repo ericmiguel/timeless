@@ -14,7 +14,7 @@ def to_np_datetime64(dt: Datetime) -> np.datetime64:
 
     Parameters
     ----------
-    datetime : Datetime
+    dt : Datetime
         Datetime or Period instance.
 
     Returns
@@ -31,7 +31,7 @@ def from_np_datetime64(dt: np.datetime64) -> Datetime:
 
     Parameters
     ----------
-    datetime : np.datetime64
+    dt : np.datetime64
         Numpy Datetime64 instance.
 
     Returns
