@@ -315,3 +315,57 @@ def get_current_week(
         freq=period_kwargs.get("freq", "days"),
         step=period_kwargs.get("step", 1),
     )
+
+
+def get_month(day: Datetime, **period_kwargs: Unpack[Periodkwargs]) -> Period:
+    """
+    Given a datetime object, get relative month as a Period in days.
+
+    You can set Period Kwargs to change time freq and step.
+
+    Parameters
+    ----------
+    zone : str, optional
+        Timezone, by default "UTC"
+
+    Returns
+    -------
+    Period
+        Month time span.
+    """
+    start = day.get_month_start()
+    end = start.get_month_end()
+    return Period(
+        start,
+        end,
+        freq=period_kwargs.get("freq", "days"),
+        step=period_kwargs.get("step", 1),
+    )
+
+
+def get_current_month(
+    zone: str = "UTC", **period_kwargs: Unpack[Periodkwargs]
+) -> Period:
+    """
+    Get current month as a Period in days.
+
+    You can set Period Kwargs to change time freq and step.
+
+    Parameters
+    ----------
+    zone : str, optional
+        Timezone, by default "UTC"
+
+    Returns
+    -------
+    Period
+        Month time span.
+    """
+    start = today(zone).get_month_start()
+    end = start.get_month_end()
+    return Period(
+        start,
+        end,
+        freq=period_kwargs.get("freq", "days"),
+        step=period_kwargs.get("step", 1),
+    )
