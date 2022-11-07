@@ -430,7 +430,7 @@ class Datetime(_datetime):
         -------
         Datetime
             First day of the month
-        """        
+        """
         return self.__class__(
             self.year,
             self.month,

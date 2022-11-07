@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from timeless.datetime import Datetime
 from timeless.datetime import parse
 from timeless.datetime import today
+from typing_extensions import SupportsIndex
 from typing_extensions import Unpack
 
 
@@ -68,7 +69,7 @@ class Period(list):
         self.start = min(self)
         self.end = max(self)
 
-    def insert(self, index: int, item: Datetime) -> None:
+    def insert(self, index: SupportsIndex, item: Datetime) -> None:
         """
         Insert a datetime instance at the given index.
 
