@@ -3,7 +3,7 @@
 set -e
 set -x
 
-mypy timeless
+mypy timeless --enable-incomplete-features
 flake8 timeless tests
 black timeless tests --check
 isort timeless tests docs_src scripts --check-only
