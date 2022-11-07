@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "timeless"
-version = "0.2.4"
+version = "0.2.5"
 description = "Datetime for people in a hurry."
 authors = ["ericmiguel <ericmiguel@id.uff.br>"]
 keywords = ["datetime", "datetime for humans"]
@@ -26,6 +26,7 @@ python-dateutil = "^2.8.2"
 "backports.zoneinfo" = { version = "^0.2.1", python = "<=3.8" }
 tzdata = { version = "^2022.6", markers = "sys_platform == 'win32'" }
 pandas = { version = "^1.5.1", optional = true }
+typing-extensions = "^4.4.0"
 
 [tool.poetry.extras]
 converters = ["pandas"]
@@ -34,17 +35,16 @@ converters = ["pandas"]
 flake8-pyproject = "^1.1.0.post0"
 isort = "^5.8.0"
 black = "^22.9.0"
-mypy = "^0.902"
 pydocstyle = "^6.1.1"
 pre-commit = "^2.13.0"
 pytest = "6.0.0"
 pytest-cov = "^3.0.0"
-types-requests = "^2.25.0"
 types-python-dateutil = "^0.1.4"
 mkdocs = "^1.2.3"
 mkdocs-material = "^8.1.10"
 autoflake = "^1.7.7"
 mkdocstrings = {extras = ["python"], version = "^0.19.0"}
+mypy = "^0.982"
 
 [tool.isort]
 profile = "black"
