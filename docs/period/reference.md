@@ -1,0 +1,3 @@
+# Period reference
+
+::: timeless.period

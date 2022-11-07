@@ -285,14 +285,9 @@ class Datetime(_datetime):
 
         return self.strftime(format)
 
-    @property
-    def zero(self) -> "Datetime":
-        """Get rid of hour, minute, second, and microsecond information."""
-        return self.set(hour=0, minute=0, second=0, microsecond=0, zone=self.zone)
-
     def set_zero(self) -> "Datetime":
-        """Equivalent function of zero property."""
-        return self.zero
+        """Get rid of hour, minute, second, microsecond and timezone information."""
+        return self.set(hour=0, minute=0, second=0, microsecond=0, zone="UTC")
 
     def diff(self, other: "Datetime") -> relativedelta.relativedelta:
         """
@@ -424,6 +419,48 @@ class Datetime(_datetime):
             Total days in the instance month.
         """
         return self.days_in_month
+
+    def get_month_start(self) -> "Datetime":
+        """
+        Get a Datetime instance on the first day of the month.
+
+        Only for semantic purposes.
+
+        Returns
+        -------
+        Datetime
+            First day of the month
+        """
+        return self.__class__(
+            self.year,
+            self.month,
+            1,
+            self.hour,
+            self.minute,
+            self.second,
+            self.microsecond,
+            zone=self.zone,
+        )
+
+    def get_month_end(self) -> "Datetime":
+        """
+        Get a Datetime instance on the last day of the month.
+
+        Returns
+        -------
+        Datetime
+            Kast day of the month
+        """
+        return self.__class__(
+            self.year,
+            self.month,
+            self.days_in_month,
+            self.hour,
+            self.minute,
+            self.second,
+            self.microsecond,
+            zone=self.zone,
+        )
 
 
 def now(zone: str = "UTC", microseconds: bool = False) -> Datetime:

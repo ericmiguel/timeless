@@ -15,15 +15,21 @@ This package is a work in progress and it was created as a study object.
 
 ## 📦 Installation
 
+
+
 ```bash
 pip install timeless
 ```
 
+If you need Numpy and Pandas convenience methods, you can also install the extra dependencies.
+
+```bash
+pip install timeless --extras converters
+```
+
 ## 📝 Why Timeless?
 
-It provides a simple API, heavily inspired by [Pendulum](https://github.com/sdispater/pendulum).
-
-I love Pendulum, although since last year (maybe 2 years) it doesn't seem to be actively maintained. If you like Pendulum, you will like Timeless. If you want a easy to adopt, integrate and expand package, you will like Timeless.
+It provides a simple API, heavily inspired by [Pendulum](https://github.com/sdispater/pendulum). If you like Pendulum and need a easy to adopt, integrate and expand package, you will like Timeless.
 
 ## 💻 Sample usage
 

@@ -1,10 +1,14 @@
 """Friendly interface for time span manipulations."""
 
+from typing import TypedDict
 from typing import Union
 
 from dateutil.relativedelta import relativedelta
 from timeless.datetime import Datetime
 from timeless.datetime import parse
+from timeless.datetime import today
+from typing_extensions import SupportsIndex
+from typing_extensions import Unpack
 
 
 class Period(list):
@@ -65,7 +69,7 @@ class Period(list):
         self.start = min(self)
         self.end = max(self)
 
-    def insert(self, index: int, item: Datetime) -> None:
+    def insert(self, index: SupportsIndex, item: Datetime) -> None:
         """
         Insert a datetime instance at the given index.
 
@@ -97,12 +101,20 @@ class Period(list):
         """
         Sum a given timedelta to the period.
 
-        Currently only supports relativedelta.
+        Parameters
+        ----------
+        other : relativedelta
+            _description_
 
         Returns
         -------
         Period
             New period with the given timedelta added.
+
+        Raises
+        ------
+        NotImplementedError
+            Currently only supports relativedelta.
         """
         if isinstance(other, relativedelta):
             delta = {
@@ -118,7 +130,7 @@ class Period(list):
             end = self.end.add(**delta)
             return self.__class__(start, end, self.freq, self.step)
 
-        return NotImplemented
+        raise NotImplementedError
 
     def subtract(self, other: relativedelta) -> "Period":
         """
@@ -235,3 +247,126 @@ class Period(list):
             return True
 
         return False
+
+
+class Periodkwargs(TypedDict):
+    """Types for Period class."""
+
+    freq: str
+    step: int
+
+
+def get_week(
+    day: Datetime, week_first_day: str = "monday", **period_kwargs: Unpack[Periodkwargs]
+) -> Period:
+    """
+    Given a datetime object, get relative week as a Period in days.
+
+    You can set Period Kwargs to change time freq and step.
+
+    Parameters
+    ----------
+    day : Datetime
+        Reference Datetime.
+    week_first_day : str, optional
+        Start day of the week, by default "monday"
+
+    Returns
+    -------
+    Period
+        Week time span.
+    """
+    start = day.get_last(week_first_day)
+    end = start.add(days=7)
+    return Period(
+        start,
+        end,
+        freq=period_kwargs.get("freq", "days"),
+        step=period_kwargs.get("step", 1),
+    )
+
+
+def get_current_week(
+    week_first_day: str = "monday",
+    zone: str = "UTC",
+    **period_kwargs: Unpack[Periodkwargs]
+) -> Period:
+    """
+    Get current week as a Period in days.
+
+    You can set Period Kwargs to change time freq and step.
+
+    Parameters
+    ----------
+    week_first_day : str, optional
+        Start day of the week, by default "monday"
+    zone : str, optional
+        Timezone, by default "UTC"
+
+    Returns
+    -------
+    Period
+        Week time span.
+    """
+    start = today(zone).get_last(week_first_day)
+    end = start.add(days=7)
+    return Period(
+        start,
+        end,
+        freq=period_kwargs.get("freq", "days"),
+        step=period_kwargs.get("step", 1),
+    )
+
+
+def get_month(day: Datetime, **period_kwargs: Unpack[Periodkwargs]) -> Period:
+    """
+    Given a datetime object, get relative month as a Period in days.
+
+    You can set Period Kwargs to change time freq and step.
+
+    Parameters
+    ----------
+    day : Datetime
+        Reference Datetime.
+
+    Returns
+    -------
+    Period
+        Month time span.
+    """
+    start = day.get_month_start()
+    end = start.get_month_end()
+    return Period(
+        start,
+        end,
+        freq=period_kwargs.get("freq", "days"),
+        step=period_kwargs.get("step", 1),
+    )
+
+
+def get_current_month(
+    zone: str = "UTC", **period_kwargs: Unpack[Periodkwargs]
+) -> Period:
+    """
+    Get current month as a Period in days.
+
+    You can set Period Kwargs to change time freq and step.
+
+    Parameters
+    ----------
+    zone : str, optional
+        Timezone, by default "UTC"
+
+    Returns
+    -------
+    Period
+        Month time span.
+    """
+    start = today(zone).get_month_start()
+    end = start.get_month_end()
+    return Period(
+        start,
+        end,
+        freq=period_kwargs.get("freq", "days"),
+        step=period_kwargs.get("step", 1),
+    )

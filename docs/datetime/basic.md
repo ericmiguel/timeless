@@ -1,6 +1,6 @@
 # Datetime basics
 
-Timeless dates and datetimes are represented by the `Datetime` class. It's the fundamental stone of the package. All Timeless objects are assumed to be UTC if any other timezone is specified.
+Timeless dates and datetimes are represented by the `Datetime` class. All Timeless objects are assumed to be UTC if any other timezone is specified.
 
 ```py linenums="1"
 --8<--
@@ -47,7 +47,3 @@ However, if you want to replace other values of a `Datetime` object, you can use
 docs_src/datetime/replacing_object_values_2.py
 --8<--
 ```
-
-## Timeless datetime and other time representations
-
-Timeless offers a number of methods to convert a `Datetime` and `Period` objects to other time representations like Python's `datetime` module and even Pandas' `Timestamp` and `DateTimeIndex`. You can read more about these methods in the [converters](datetime.md) section.

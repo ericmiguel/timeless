@@ -5,9 +5,14 @@ from datetime import datetime as _datetime
 from timeless.datetime import Datetime
 
 
-def to_datetime(datetime: _datetime) -> _datetime:
+def to_datetime(dt: Datetime) -> _datetime:
     """
     Convert a timeless.Datetime to a datetime object.
+
+    Parameters
+    ----------
+    dt : Datetime
+        Timeless datetime to convert to.
 
     Returns
     -------
@@ -15,14 +20,14 @@ def to_datetime(datetime: _datetime) -> _datetime:
         Python's default datetime object.
     """
     return _datetime(
-        year=datetime.year,
-        month=datetime.month,
-        day=datetime.day,
-        hour=datetime.hour,
-        minute=datetime.minute,
-        second=datetime.second,
-        microsecond=datetime.microsecond,
-        tzinfo=datetime.tzinfo,
+        year=dt.year,
+        month=dt.month,
+        day=dt.day,
+        hour=dt.hour,
+        minute=dt.minute,
+        second=dt.second,
+        microsecond=dt.microsecond,
+        tzinfo=dt.tzinfo,
     )
 
 
@@ -32,7 +37,7 @@ def from_datetime(dt: _datetime, zone: str = "UTC") -> Datetime:
 
     Parameters
     ----------
-    datetime : _datetime
+    dt : _datetime
         Python's default datetime object.
     zone : Union[ZoneInfo, str], optional
         Timezone, by default ZoneInfo("UTC")
