@@ -47,8 +47,6 @@ jobs:
         run: poetry run pydocstyle timeless
       - name: Run Mypy
         run: poetry run mypy timeless
-      - name: Run Pytest
-        run: poetry run pytest --cov=timeless tests/
   update_docs:
     runs-on: ubuntu-latest
     steps:
