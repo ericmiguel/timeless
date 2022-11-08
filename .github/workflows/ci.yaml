@@ -47,6 +47,8 @@ jobs:
         run: poetry run pydocstyle timeless
       - name: Run Mypy
         run: poetry run mypy timeless --enable-incomplete-features
+      - name: Run Pytest
+        run: poetry run pytest --cov=timeless tests/datetime
   update_docs:
     runs-on: ubuntu-latest
     steps:
