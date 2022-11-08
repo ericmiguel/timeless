@@ -97,7 +97,7 @@ class Period(list):
         self.start = min(self)
         self.end = max(self)
 
-    def add(self, other: relativedelta) -> "Period":
+    def _add(self, other: relativedelta) -> "Period":
         """
         Sum a given timedelta to the period.
 
@@ -132,7 +132,7 @@ class Period(list):
 
         raise NotImplementedError
 
-    def subtract(self, other: relativedelta) -> "Period":
+    def _subtract(self, other: relativedelta) -> "Period":
         """
         Sum (subtract) a given timedelta to the period.
 
@@ -145,7 +145,7 @@ class Period(list):
         Period
             New period with the given timedelta added.
         """
-        return self.add(other)
+        return self._add(other)
 
     def shift(
         self,
@@ -184,7 +184,7 @@ class Period(list):
         Period
             New period with the given timedelta added.
         """
-        return self.add(
+        return self._add(
             relativedelta(
                 years=years,
                 months=months,

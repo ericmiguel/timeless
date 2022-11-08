@@ -60,6 +60,41 @@ class Datetime(_datetime):
 
         return self
 
+    def __init__(
+        self,
+        year: int,
+        month: int,
+        day: int,
+        hour: int = 0,
+        minute: int = 0,
+        second: int = 0,
+        microsecond: int = 0,
+        zone: str = "UTC",
+    ) -> None:
+        """
+        Init a Timeless Datetime.
+
+        Parameters
+        ----------
+        year : int
+            _description_
+        month : int
+            _description_
+        day : int
+            _description_
+        hour : int, optional
+            _description_, by default 0
+        minute : int, optional
+            _description_, by default 0
+        second : int, optional
+            _description_, by default 0
+        microsecond : int, optional
+            _description_, by default 0
+        zone : str, optional
+            _description_, by default "UTC"
+        """
+        self.zone = zone
+
     def add(
         self,
         years: int = 0,
@@ -78,7 +113,7 @@ class Datetime(_datetime):
         Datetime
             New datetime instance with added value.
         """
-        dt = self + relativedelta.relativedelta(
+        other = relativedelta.relativedelta(
             years=years,
             months=months,
             days=days,
@@ -88,15 +123,29 @@ class Datetime(_datetime):
             microseconds=microseconds,
         )
 
-        return self.__class__(
-            dt.year,
-            dt.month,
-            dt.day,
-            dt.hour,
-            dt.minute,
-            dt.second,
-            dt.microsecond,
-            zone=self.zone,
+        result = (
+            _datetime(
+                self.year,
+                self.month,
+                self.day,
+                self.hour,
+                self.minute,
+                self.second,
+                self.microsecond,
+                self.tzinfo,
+            )
+            + other
+        )
+
+        return Datetime(
+            result.year,
+            result.month,
+            result.day,
+            result.hour,
+            result.minute,
+            result.second,
+            result.microsecond,
+            str(self.tzinfo),
         )
 
     def subtract(
@@ -117,7 +166,7 @@ class Datetime(_datetime):
         Datetime
             New datetime instance with the subtracted value.
         """
-        dt = self - relativedelta.relativedelta(
+        other = relativedelta.relativedelta(
             years=years,
             months=months,
             days=days,
@@ -127,15 +176,29 @@ class Datetime(_datetime):
             microseconds=microseconds,
         )
 
-        return self.__class__(
-            dt.year,
-            dt.month,
-            dt.day,
-            dt.hour,
-            dt.minute,
-            dt.second,
-            dt.microsecond,
-            zone=self.zone,
+        result = (
+            _datetime(
+                self.year,
+                self.month,
+                self.day,
+                self.hour,
+                self.minute,
+                self.second,
+                self.microsecond,
+                self.tzinfo,
+            )
+            - other
+        )
+
+        return Datetime(
+            result.year,
+            result.month,
+            result.day,
+            result.hour,
+            result.minute,
+            result.second,
+            result.microsecond,
+            str(self.tzinfo),
         )
 
     def __iter__(self) -> Iterator[int]:
@@ -228,21 +291,13 @@ class Datetime(_datetime):
             zone=zone,
         )
 
-    def utc(self) -> "Datetime":
-        """Set datetime as UTC without apply the timezone offset."""
+    def set_utc(self) -> "Datetime":
+        """Set datetime as UTC without applying the timezone offset."""
         return self.set(zone="UTC")
 
-    @property
-    def zone(self) -> str:
-        """
-        Get the timezone object.
-
-        Returns
-        -------
-        ZoneInfo
-            Timezone object.
-        """
-        return str(self.tzinfo)
+    def is_leap(self) -> bool:
+        """Return true or false for leap year Datetime instances."""
+        return self.year % 4 == 0 and (self.year % 100 != 0 or self.year % 400 == 0)
 
     def is_future(self) -> bool:
         """
@@ -286,8 +341,10 @@ class Datetime(_datetime):
         return self.strftime(format)
 
     def set_zero(self) -> "Datetime":
-        """Get rid of hour, minute, second, microsecond and timezone information."""
-        return self.set(hour=0, minute=0, second=0, microsecond=0, zone="UTC")
+        """Get rid of hour, minute, second and microsecond values."""
+        return self.set(
+            hour=0, minute=0, second=0, microsecond=0, zone=str(self.tzinfo)
+        )
 
     def diff(self, other: "Datetime") -> relativedelta.relativedelta:
         """
