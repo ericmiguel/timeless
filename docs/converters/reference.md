@@ -2,18 +2,18 @@
 
 ## Datetime converter
 
-::: timeless.converters.dt_conv
+::: timeless.converters.datetime_converter
     options:
         heading_level: 3
 
 ## Numpy converter
 
-::: timeless.converters.np_conv
+::: timeless.converters.numpy_converter
     options:
         heading_level: 3
 
 ## Pandas converter
 
-::: timeless.converters.pd_conv
+::: timeless.converters.pandas_converter
     options:
         heading_level: 3
