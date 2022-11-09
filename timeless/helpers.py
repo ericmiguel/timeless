@@ -32,12 +32,12 @@ def minutes_to_seconds(minutes: int) -> float:
 
 def minutes_to_hours(minutes: int) -> float:
     """Minutes to hours conversion."""
-    return minutes * minutes_per_hour
+    return minutes / minutes_per_hour
 
 
 def minutes_to_days(minutes: int) -> float:
     """Minutes to days conversion."""
-    return minutes * minutes_per_day
+    return minutes / minutes_per_day
 
 
 def hours_to_seconds(hours: int) -> float:
@@ -47,7 +47,7 @@ def hours_to_seconds(hours: int) -> float:
 
 def hours_to_minutes(hours: int) -> float:
     """Hours to minutes conversion."""
-    return hours / minutes_per_hour
+    return hours * minutes_per_hour
 
 
 def hours_to_days(hours: int) -> float:
