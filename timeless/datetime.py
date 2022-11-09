@@ -8,6 +8,8 @@ from datetime import datetime as _datetime
 from typing import Iterator
 from typing import Optional
 
+from datetime import timedelta as _timedelta
+
 
 try:  # Python <3.9
     from zoneinfo import ZoneInfo  # type: ignore
@@ -430,6 +432,14 @@ class Datetime(_datetime):
         numeric_weekday = self.weekday()
         weekday_name = calendar.day_name[numeric_weekday]
         return weekday_name.lower()
+
+    def get_utc_offset(self) -> float:
+        """Get UTC offset in hours."""
+        offset = self.utcoffset()
+        if offset:
+            return offset / _timedelta(hours=1)
+
+        raise ValueError("Error on getting UTC offset.")
 
     def is_today(self, weekday: str, week_start: Optional[str] = None) -> bool:
         """
