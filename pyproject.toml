@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "timeless"
-version = "0.2.6"
+version = "0.2.7"
 description = "Datetime for people in a hurry."
 authors = ["ericmiguel <ericmiguel@id.uff.br>"]
 keywords = ["datetime", "datetime for humans"]
@@ -45,6 +45,7 @@ mkdocstrings = {extras = ["python"], version = "^0.19.0"}
 mypy = "^0.990"
 pytest = "^7.2.0"
 pytest-cov = "^4.0.0"
+pandas = "^1.5.1"
 
 [tool.isort]
 profile = "black"
