@@ -1,22 +1,17 @@
-"""Type converters for Pandas integrations."""
-
 import warnings
+
+from typing import Optional
+
+import pandas as pd  # type: ignore
+
+from timeless.datetime import Datetime
+from timeless.period import Period
 
 
 try:  # Python <3.9
     from zoneinfo import ZoneInfo  # type: ignore
 except ImportError:
     from backports.zoneinfo import ZoneInfo  # type: ignore
-
-try:
-    import pandas as pd  # type: ignore
-except ImportError:
-    raise ImportError("Run 'pip install timeless --extras converters'")
-
-from typing import Optional
-
-from timeless.datetime import Datetime
-from timeless.period import Period
 
 
 def parse_pandas_offset_freq(offset: str) -> Optional[str]:
@@ -81,8 +76,14 @@ def parse_pandas_offset_freq(offset: str) -> Optional[str]:
     return offsets[offset]
 
 
-def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
-    """Pandas DatetimeIndex to Period."""
+def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:  # type: ignore
+    """
+    Pandas DatetimeIndex to Period.
+
+    Only avaible if Pandas is installed.
+
+    Run 'pip install timeless --extras converters'
+    """
     freq = None
 
     if dt.freq:
@@ -126,10 +127,14 @@ def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
 
 
 def from_pd_timestamp(
-    dt: pd.Timestamp, zone: str = "UTC", enforce_zone: bool = False
+    dt: pd.Timestamp, zone: str = "UTC", enforce_zone: bool = False  # type: ignore
 ) -> Datetime:
     """
     Pandas Timestamp to Datetime.
+
+    Only avaible if Pandas is installed.
+
+    Run 'pip install timeless --extras converters'
 
     Parameters
     ----------
@@ -165,7 +170,7 @@ def from_pd_timestamp(
     )
 
 
-def to_pd_timestamp(dt: Datetime) -> pd.Timestamp:
+def to_pd_timestamp(dt: Datetime) -> pd.Timestamp:  # type: ignore
     """
     Create a pandas.Timestamp instance from a Datetime.
 
