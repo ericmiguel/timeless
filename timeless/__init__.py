@@ -24,7 +24,7 @@ from timeless.period import Period as period
 
 
 try:
-    import pandas  # type: ignore
+    import pandas  # type:ignore # noqa
 except ImportError:
     pass
 else:
@@ -33,7 +33,7 @@ else:
     from timeless.converters.pandas_converter import to_pd_timestamp
 
 try:
-    import numpy  # type: ignore
+    import numpy  # type:ignore # noqa
 except ImportError:
     pass
 else:

@@ -13,7 +13,7 @@ def test_to_pd_timestamp():
 
 
 def test_from_pd_timestamp_utc():
-    dt = Timestamp(f"1975-01-01 15:00:00")
+    dt = Timestamp("1975-01-01 15:00:00")
     dt_ref = timeless.datetime(1975, 1, 1, 15)
     dt_pd = timeless.from_pd_timestamp(dt)
 
