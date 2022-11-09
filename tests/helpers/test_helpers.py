@@ -6,7 +6,7 @@ def test_seconds_to_minutes():
 
 
 def test_seconds_to_hours():
-    return timeless.seconds_to_hours(3600) == 1
+    assert timeless.seconds_to_hours(3600) == 1
 
 
 def test_seconds_to_days():
@@ -14,15 +14,15 @@ def test_seconds_to_days():
 
 
 def test_minutes_to_seconds():
-    return timeless.minutes_to_seconds(1) == 60
+    assert timeless.minutes_to_seconds(1) == 60
 
 
 def test_minutes_to_hours():
-    return timeless.minutes_to_hours(60) == 1
+    assert timeless.minutes_to_hours(60) == 1
 
 
 def test_minutes_to_days():
-    return timeless.minutes_to_days(1440) == 1
+    assert timeless.minutes_to_days(1440) == 1
 
 
 def test_hours_to_seconds():

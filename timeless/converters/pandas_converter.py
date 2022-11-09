@@ -1,22 +1,19 @@
-"""Type converters for Pandas integrations."""
-
 import warnings
+
+from typing import Optional
+
+import pandas as pd  # type: ignore
+
+from timeless.datetime import Datetime
+from timeless.period import Period
 
 
 try:  # Python <3.9
     from zoneinfo import ZoneInfo  # type: ignore
+    from zoneinfo._common import ZoneInfoNotFoundError  # type: ignore
 except ImportError:
     from backports.zoneinfo import ZoneInfo  # type: ignore
-
-try:
-    import pandas as pd  # type: ignore
-except ImportError:
-    raise ImportError("Run 'pip install timeless --extras converters'")
-
-from typing import Optional
-
-from timeless.datetime import Datetime
-from timeless.period import Period
+    from backports.zoneinfo._common import ZoneInfoNotFoundError  # type: ignore
 
 
 def parse_pandas_offset_freq(offset: str) -> Optional[str]:
@@ -81,8 +78,14 @@ def parse_pandas_offset_freq(offset: str) -> Optional[str]:
     return offsets[offset]
 
 
-def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
-    """Pandas DatetimeIndex to Period."""
+def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:  # type: ignore
+    """
+    Pandas DatetimeIndex to Period.
+
+    Only avaible if Pandas is installed.
+
+    Run 'pip install timeless --extras converters'
+    """
     freq = None
 
     if dt.freq:
@@ -125,33 +128,42 @@ def from_pd_datetimeindex(dt: pd.DatetimeIndex) -> Period:
     return Period(start, end, freq)
 
 
-def from_pd_timestamp(
-    dt: pd.Timestamp, zone: str = "UTC", enforce_zone: bool = False
-) -> Datetime:
+def from_pd_timestamp(dt: pd.Timestamp) -> Datetime:
     """
     Pandas Timestamp to Datetime.
+
+    If no timezone info is offered, UTC is assumed. If just fixed hour offset exists,
+    the time value is converted to UTC (thus the offset is apllyed).
+
+    Only avaible if Pandas is installed.
+
+    Run 'pip install timeless --extras converters'
 
     Parameters
     ----------
     dt : pd.Timestamp
         Pandas Timestamp.
-    zone : str, optional
-        Timezone name in case of any is found, by default "UTC"
-    enforce_zone : bool, optional
-        Force timezone conversion to 'zone' value, by default False
 
     Returns
     -------
     Datetime
         Timeless Datetime
     """
+    # No timezone info (fixed offset or timezone name)
     if not hasattr(dt.tz, "zone"):
-        dt = dt.tz_localize(zone)
-
-    if enforce_zone:
-        dt = dt.tz_convert(zone)
+        dt = dt.tz_localize("UTC")
+        dt = dt.tz_convert("UTC")
 
     datetime_obj = dt.to_pydatetime()
+
+    zone = str(datetime_obj.tzinfo) if datetime_obj.tzinfo else "UTC"
+
+    try:
+        _ = ZoneInfo(zone)
+    # Some timezone info, but unamed fixed offset
+    except ZoneInfoNotFoundError:
+        zone = "UTC"
+        datetime_obj = dt.tz_convert("UTC").to_pydatetime()
 
     return Datetime(
         datetime_obj.year,
@@ -161,11 +173,11 @@ def from_pd_timestamp(
         datetime_obj.minute,
         datetime_obj.second,
         datetime_obj.microsecond,
-        str(datetime_obj.tzinfo),
+        zone,
     )
 
 
-def to_pd_timestamp(dt: Datetime) -> pd.Timestamp:
+def to_pd_timestamp(dt: Datetime) -> pd.Timestamp:  # type: ignore
     """
     Create a pandas.Timestamp instance from a Datetime.
 

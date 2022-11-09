@@ -1,5 +1,3 @@
-"""Type converters for native Datetime integrations."""
-
 from datetime import datetime as _datetime
 
 from timeless.datetime import Datetime
